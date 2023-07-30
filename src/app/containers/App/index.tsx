@@ -6,22 +6,18 @@ export namespace App {
   export interface Props extends RouteComponentProps<void> { }
 }
 
-interface Items {
-  [key: string]: number | undefined
-}
-
 interface IItemProps {
   name: string;
   description: string;
   unit: string;
   price: number;
-  quantity?: number;
+  quantity: number;
   onChange: (value: number) => void;
 }
 
 const parameters = [
   {
-    name: "lakierowanie_olejowanie", 
+    name: "lakierowanie_olejowanie",
     description: "Lakierowanie lub olejowanie.",
     unit: "szt",
     price: 0,
@@ -59,33 +55,195 @@ const parameters = [
     name: "stopnie_beton_1.5m+",
     description: "Stopnie mocowane do betonu schody o szerokości powyżej 1.5m.",
     unit: "szt",
-    price: 718,
+    price: 931,
     quantity: 0,
   },
   {
     name: "zabiegowe",
     description: "Dopłata za stopnie zabiegowe kształt trójkąta, trapezu.",
     unit: "szt",
-    price: 718,
+    price: 375,
     quantity: 0,
   },
   {
     name: "8cm_grubosc",
     description: "Dopłata za stopień 8cm grubości.",
     unit: "szt",
-    price: 718,
+    price: 500,
     quantity: 0,
   },
-  
+  {
+    name: "zapraszajace_polkragle",
+    description: "Dopłata za stopnie zapraszające półokrągłe.",
+    unit: "szt",
+    price: 588,
+    quantity: 0,
+  },
+  {
+    name: "podest_1.39m",
+    description: "Pole powierzchni podestu jeśli krótki do 1.39 m.",
+    unit: "m2",
+    price: 1500,
+    quantity: 0,
+  },
+  {
+    name: "podest_1.79m",
+    description: "Pole powierzchni podestu jeśli długi 1.4 m do 1.79 m.",
+    unit: "m2",
+    price: 1763,
+    quantity: 0,
+  },
+  {
+    name: "podest_1.8m",
+    description: "Pole powierzchni podestu jeśli bardzo długi powyżej 1.8 m.",
+    unit: "m2",
+    price: 2063,
+    quantity: 0,
+  },
+  {
+    name: "podstopnice_drewniane",
+    description: "Ilośc podstopnic drewnianych.",
+    unit: "szt",
+    price: 238,
+    quantity: 0,
+  },
+  {
+    name: "podstopnice_drewniane_dywanowe",
+    description: "Ilość podstopnic drewnianych, pogrubianych schody dywanowe.",
+    unit: "szt",
+    price: 275,
+    quantity: 0,
+  },
+  {
+    name: "podstopnice_mdf_lakier_polysk",
+    description: "Ilośc podstopnic z MDF lakierowanego na połysk.",
+    unit: "szt",
+    price: 290,
+    quantity: 0,
+  },
+  {
+    name: "podstopnice_mdf_lakier_mat",
+    description: "Ilośc podstopnic z MDF lakierowanego na mat.",
+    unit: "szt",
+    price: 250,
+    quantity: 0,
+  },
+  {
+    name: "podstopnice_szklo_lacobel",
+    description: "Ilość podstopnic ze szkła lacobel klejonego na MDF.",
+    unit: "szt",
+    price: 333,
+    quantity: 0,
+  },
+  {
+    name: "podstopnice_giete_drewno",
+    description: "Ilość podstopnic z giętego drewna.",
+    unit: "szt",
+    price: 2500,
+    quantity: 0,
+  },
+  {
+    name: "cokol_drewniane",
+    description: "Cokoły drewniane listwy przy ścianach. Ilośc stopni.",
+    unit: "szt",
+    price: 163,
+    quantity: 0,
+  },
+  {
+    name: "cokoly_drewniane_45_stopni",
+    description: "Cokoły drewniane zacinane na 45°. Ilośc stopni.",
+    unit: "szt",
+    price: 300,
+    quantity: 0,
+  },
+  {
+    name: "cokoly_mdf_lakier_polysk",
+    description: "Cokoły z MDF w polerkach na wysoki połysk. Ilośc stopni.",
+    unit: "szt",
+    price: 300,
+    quantity: 0,
+  },
+  {
+    name: "cokoly_szklo_lacobel",
+    description: "Cokoły ze szkła lacobel. Ilośc stopni.",
+    unit: "szt",
+    price: 350,
+    quantity: 0,
+  },
+  {
+    name: "cokoly_kerrock",
+    description: "Cokoły ze sztucznego kamienia kerrock. Ilośc stopni.",
+    unit: "szt",
+    price: 375,
+    quantity: 0,
+  },
+  {
+    name: "policzki_szeroka_deska",
+    description: "Policzki przy ścianach szeroka deska zamiast cokołów. Ilość stopni.",
+    unit: "szt",
+    price: 500,
+    quantity: 0,
+  },
+  {
+    name: "krawedz_stropu_katownik",
+    description: "Obróbka krawędzi stropu kątownikiem drewnianym lub aluminiowym.",
+    unit: "mb",
+    price: 38,
+    quantity: 0,
+  },
+  {
+    name: "krawedz_stropu_nakladka",
+    description: "Obróbka krawędzi stropu nakładką z drewna i listwą z boku.",
+    unit: "mb",
+    price: 500,
+    quantity: 0,
+  },
+  {
+    name: "porecz_drewno",
+    description: "Poręcz mocowana do ściany.",
+    unit: "mb",
+    price: 563,
+    quantity: 0,
+  },
+  {
+    name: "balustrada_drewno_stal",
+    description: "Balustrada w drewnie i stali nierdzewnej.",
+    unit: "mb",
+    price: 1400,
+    quantity: 0,
+  },
+  {
+    name: "balustrada_spawana",
+    description: "Balustrada spawana malowana proszkowo.",
+    unit: "mb",
+    price: 1500,
+    quantity: 0,
+  },
+  {
+    name: "balustrada_drewniana",
+    description: "Balustrada drewniana z tralkami kwadratowymi.",
+    unit: "mb",
+    price: 1750,
+    quantity: 0,
+  },
+  {
+    name: "led_montaz",
+    description: "Oświetlenie ledowe pod trepami sterowane czujnikiem ruchu. Ilośc stopni.",
+    unit: "szt",
+    price: 238,
+    quantity: 0,
+  },
+  {
+    name: "led_bez_montazu",
+    description: "Oświetlenie ledowe bez montażu elektryki. Ilośc stopni.",
+    unit: "szt",
+    price: 55,
+    quantity: 0,
+  },
 ];
 
 export const App = () => {
-  const [state, setState] = React.useState({ 
-    "lakierowanie-lub-olejowanie": 0,
-    "bejca": 0,
-    "stopnie-beton-1m": 0,
-    "stopnie-beton-1.25m": 0,
-  } as Items);
+  const [state, setState] = React.useState(parameters);
 
   return (
     <div className="calculator">
@@ -94,251 +252,29 @@ export const App = () => {
           <tr>
             <th>Parametry</th>
             <th>J.m.</th>
-            <th>Cena jedn.</th>
-            <th>Ilość</th>
+            <th>Cena</th>
+            <th>Liczba</th>
             <th>Cena usługi</th>
           </tr>
         </thead>
         <tfoot>
-          <tr>
-            <th colSpan={4}>Razem cena BRUTTO:</th>
-            <th id="summary">0</th>
+          <tr >
+            <th colSpan={2}></th>
+            <th colSpan={2}>Razem cena BRUTTO:</th>
+            <th className="footer" id="summary">{state.map(x => x.price * x.quantity).reduce((previous, current) => current + previous)} zł</th>
           </tr>
         </tfoot>
         <tbody>
-          <ItemCalculator
-            description="Lakierowanie lub olejowanie."
-            name="lakierowanie-lub-olejowanie"
-            price={0}
-            quantity={state["lakierowanie-lub-olejowanie"]}
-            onChange={value => setState({ ...state, "lakierowanie-lub-olejowanie": value })}
-            unit="szt"
-            key="lakierowanie-lub-olejowanie"
-          />
-          <ItemCalculator
-            description="Bejcowanie na wybrany kolor."
-            name="bejca"
-            quantity={state["bejca"]}
-            onChange={value => setState({ ...state, "bejca": value })}
-            price={80}
-            unit="szt"
-            key="bejca"
-          />
-          <ItemCalculator
-            description="Stopnie mocowane do betonu wąskie schody do 1m."
-            name="stopnie-beton-1m"
-            quantity={state["stopnie-beton-1m"]}
-            onChange={value => setState({ ...state, "stopnie-beton-1m": value })}
-            price={500}
-            unit="szt"
-            key="stopnie-beton-1m"
-          />
-          <ItemCalculator
-            description="Stopnie mocowane do betonu schody o szerokości od 1m do 1.25m."
-            name="stopnie-beton-1.25m"
-            quantity={state["stopnie-beton-1.25m"]}
-            onChange={value => setState({ ...state, "stopnie-beton-1.25m": value })}
-            price={500}
-            unit="szt"
-            key="stopnie-beton-1.25m"
-          />
-          <tr>
-            <td>Stopnie mocowane do betonu schody o szerokości od 1.26m do 1.5m</td>
-            <td>szt</td>
-            <td>718.00</td>
-            <td><input name="gadzie-gipsowe" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Stopnie mocowane do betonu schody o szerokości powyżej 1.5m</td>
-            <td>szt</td>
-            <td>931.00</td>
-            <td><input name="gadzie-gipsowe" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Dopłata za stopnie zabiegowe kształt trójkąta, trapezu</td>
-            <td>szt</td>
-            <td>375.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Dopłata za stopień 8cm grubości</td>
-            <td>szt</td>
-            <td>500.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Dopłata za stopnie zapraszające półokrągłe</td>
-            <td>szt</td>
-            <td>588.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Pole powierzchni podestu jeśli krótki do 1,39 m.</td>
-            <td>m<sup>2</sup></td>
-            <td>1500.00</td>
-            <td><input name="kafelkowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Pole powierzchni podestu jeśli długi 1,4 m do 1,79 m.</td>
-            <td>m<sup>2</sup></td>
-            <td>1763.00</td>
-            <td><input name="kafelkowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Pole powierzchni podestu jeśli bardzo długi powyżej 1,8 m.</td>
-            <td>m<sup>2</sup></td>
-            <td>2063.00</td>
-            <td><input name="kafelkowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Ilośc podstopnic drewnianych</td>
-            <td>szt</td>
-            <td>238.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Ilość podstopnic drewnianych, pogrubianych schody dywanowe</td>
-            <td>szt</td>
-            <td>275.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Ilośc podstopnic z MDF lakierowanego na połysk</td>
-            <td>szt</td>
-            <td>290.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Ilośc podstopnic z MDF lakierowanego na mat</td>
-            <td>szt</td>
-            <td>250.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Ilość podstopnic ze szkła lacobel klejonego na MDF</td>
-            <td>szt</td>
-            <td>333.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Ilość podstopnic z giętego drewna</td>
-            <td>szt</td>
-            <td>2500.00</td>
-            <td><input name="malowanie" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Cokoły drewniane listwy przy ścianach. Ilośc stopni</td>
-            <td>szt</td>
-            <td>163.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Cokoły drewniane zacinane na 45°. Ilośc stopni</td>
-            <td>szt</td>
-            <td>300.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Cokoły z MDF w polerkach na wysoki połysk. Ilośc stopni</td>
-            <td>szt</td>
-            <td>300.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Cokoły ze szkła lacobel. Ilośc stopni</td>
-            <td>szt</td>
-            <td>350.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Cokoły ze sztucznego kamienia kerrock. Ilośc stopni</td>
-            <td>szt</td>
-            <td>375.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Policzki przy ścianach szeroka deska zamiast cokołów. Ilość stopni</td>
-            <td>szt</td>
-            <td>500.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Obróbka krawędzi stropu kątownikiem drewnianym lub aluminiowym</td>
-            <td>mb</td>
-            <td>38.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Obróbka krawędzi stropu nakładką z drewna i listwą z boku</td>
-            <td>mb</td>
-            <td>500.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Poręcz mocowana do ściany</td>
-            <td>mb</td>
-            <td>563.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Balustrada w drewnie i stali nierdzewnej</td>
-            <td>mb</td>
-            <td>1400.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Balustrada spawana malowana proszkowo</td>
-            <td>mb</td>
-            <td>1500.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Balustrada drewniana z tralkami kwadratowymi</td>
-            <td>mb</td>
-            <td>1750.00</td>
-            <td><input name="montaz-okien" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Oświetlenie ledowe pod trepami sterowane czujnikiem ruchu. Ilośc stopni</td>
-            <td>szt</td>
-            <td>238.00</td>
-            <td><input name="gadzie-gipsowe" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Oświetlenie ledowe bez montażu elektryki. Ilośc stopni</td>
-            <td>szt</td>
-            <td>55.00</td>
-            {/* <td><input defaultValue="44.00" name="gadzie-gipsowe-cena" size={5} type="text"/></td> */}
-            <td><input name="gadzie-gipsowe" size={5} type="text" /></td>
-            <td>0</td>
-          </tr>
+          {state.map((item, index) => (
+            <ItemCalculator
+              key={index}
+              {...item}
+              onChange={(quantity) => {
+                const newState = [...state];
+                newState[index].quantity = quantity;
+                setState(newState);
+              }} />
+          ))}
         </tbody>
       </table>
     </div>
@@ -347,21 +283,22 @@ export const App = () => {
 
 
 const ItemCalculator = (props: IItemProps) => {
+  const { name, description, unit, price, quantity, onChange } = props;
   return (
     <tr>
-      <td>{props.description}</td>
-      <td>{props.unit}</td>
-      <td>{props.price}</td>
+      <td>{description}</td>
+      <td>{unit}</td>
+      <td>{price}</td>
       <td>
         <input
-          value={props.quantity}
-          onChange={event => props.onChange(parseInt(event.target.value, 10))}
+          value={quantity}
+          onChange={event => onChange(parseInt(event.target.value, 10))}
           name={name}
-          size={5}
+          size={2}
           type="text"
         />
       </td>
-      <td>{props.quantity! * props.price}</td>
+      <td>{quantity * price}</td>
     </tr>
   );
 };
