@@ -17,7 +17,9 @@
     "paths": {
       "app/*": ["./app/*"]
     },
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "allowUnusedLabels": true
   },
   "exclude": ["build", "node_modules"]
 }

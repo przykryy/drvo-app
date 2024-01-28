@@ -1,20 +1,30 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { createBrowserHistory } from 'history';
-import { configureStore } from 'app/store';
-import { Router } from 'react-router';
+import ReactDOM from 'react-dom/client';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import { App } from './app';
+import { Offer } from './app/containers/Offer/OfferComponent';
+import { HelpComponent } from './app/containers/App/HelpComponent';
 
-// prepare store
-const history = createBrowserHistory();
-const store = configureStore();
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App/>,
+  },
+  {
+    path: "/oferta",
+    element: <Offer/>
+  },
+  {
+    path: "/pomoc",
+    element: <HelpComponent/>
+  }
+]);
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
-  </Provider>,
-  document.getElementById('root')
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
