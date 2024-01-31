@@ -1,5 +1,5 @@
 import React from 'react';
-import { App as TodoApp } from 'app/containers/App/App';
+import { Calculator as TodoApp } from 'app/containers/Calculator/Calculator';
 import { hot } from 'react-hot-loader';
 
 export const App = hot(module)(() => (

@@ -4,22 +4,21 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { App } from './app';
+import { Calculator } from './app/containers/Calculator/Calculator';
 import { Offer } from './app/containers/Offer/OfferComponent';
-import { HelpComponent } from './app/containers/App/HelpComponent';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    element: <Calculator/>,
   },
   {
     path: "/oferta",
     element: <Offer/>
   },
   {
-    path: "/pomoc",
-    element: <HelpComponent/>
+    path: "*",
+    element: <Calculator/>,
   }
 ]);
 

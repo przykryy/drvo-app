@@ -7,9 +7,9 @@ interface IButtonProps {
   className?: string;
 }
 
-export const Button = ({ label, onClick, className }: IButtonProps) => {
+export const PrimaryButton = ({ label, onClick, className }: IButtonProps) => {
   return (
-    <button className={`custom-button `} onClick={onClick}>
+    <button className={`custom-button ${className}`} onClick={onClick}>
       {label}
     </button>
   );
