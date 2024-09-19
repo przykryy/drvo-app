@@ -1,4 +1,5 @@
 import * as React  from 'react';
+import Button from '@mui/material/Button';
 import './Button.scss'; // Import the external CSS file for styling
 
 interface IButtonProps {
@@ -9,8 +10,8 @@ interface IButtonProps {
 
 export const PrimaryButton = ({ label, onClick, className }: IButtonProps) => {
   return (
-    <button className={`custom-button ${className}`} onClick={onClick}>
+    <Button color='primary' onClick={onClick}>
       {label}
-    </button>
+    </Button>
   );
 };

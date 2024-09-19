@@ -10,7 +10,8 @@
 
 @media print {
   table th {
-    color: #333 !important;;
+    color: #333 !important;
+    ;
   }
 }
 
@@ -27,38 +28,41 @@ a[href^="mailto:"] {
 }
 
 
-input{
+input {
   width: 60px;
   height: 30px;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
   font-size: 14px;
-  border:0;
+  border: 0;
   background: none;
-  border-bottom:1px solid #ccc;
-  outline:none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
   border-radius: 0;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   touch-action: none;
-  &:focus,&:valid{
-    &~label{
+
+  &:focus,
+  &:valid {
+    &~label {
       color: #333;
       transform: translateY(-20px);
-      font-size:0.825em;
-      cursor:cell;
+      font-size: 0.825em;
+      cursor: cell;
     }
   }
-  &:focus{
-    &~.underline{
+
+  &:focus {
+    &~.underline {
       width: 100%;
     }
   }
 }
 
 input[type='number'] {
-  -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,
@@ -68,7 +72,7 @@ input::-webkit-inner-spin-button {
 
 @media only screen and (max-width: 980px) {
   table {
-    width: 100%!important;
+    width: 100% !important;
     font-size: 24px;
   }
 
@@ -87,42 +91,42 @@ input::-webkit-inner-spin-button {
   word-wrap: break-word;
 
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-  color: #333;
-  font-family: Arial, sans-serif;
-  // font-size: 14px;
-  word-wrap: break-word;
-}
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    color: #333;
+    font-family: Arial, sans-serif;
+    // font-size: 14px;
+    word-wrap: break-word;
+  }
 
-table td {
-  background-color: #fff;
-  padding: 10px;
-  border: 1px solid #ccc;
-  font-weight: bold;
-  text-align: center;
-}
+  table td {
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    text-align: center;
+  }
 
-table tr:nth-child(even) td {
-  background-color: #f2f2f2;
-}
+  table tr:nth-child(even) td {
+    background-color: #f2f2f2;
+  }
 
-table tr:hover td {
-  background-color: #0f57812d;
-}
+  table tr:hover td {
+    background-color: #0f57812d;
+  }
 
-table th {
-  background-color: #0f5781;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
-  padding: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 1px solid #ccc;
+  table th {
+    // background-color: #0f5781;
+    // color: #fff;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid #ccc;
 
-}
+  }
 }
 
 .flex-container {
@@ -132,25 +136,31 @@ table th {
 
 /* Individual div styles */
 .info {
-  width: 48%; /* Adjust the width as needed */
+  width: 48%;
+  /* Adjust the width as needed */
   border: 1px solid #ccc;
-  padding: 10px; /* Add padding for better visual appearance */
+  padding: 10px;
+  /* Add padding for better visual appearance */
 }
 
 /* Flex container styles for company info */
 .company-info-container {
   display: flex;
-  align-items: center; /* Center items vertically */
+  align-items: center;
+  /* Center items vertically */
 }
 
 /* Style for the company logo */
 .company-logo {
-  width: 50px; /* Adjust the width as needed */
+  width: 50px;
+  /* Adjust the width as needed */
   height: auto;
-  margin-right: 10px; /* Add some spacing between the image and the company name */
+  margin-right: 10px;
+  /* Add some spacing between the image and the company name */
 }
 
 /* Style for the company name */
 .company-name {
-  font-size: 1.5em; /* Adjust the font size as needed */
+  font-size: 1.5em;
+  /* Adjust the font size as needed */
 }

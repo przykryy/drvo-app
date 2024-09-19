@@ -39,7 +39,7 @@ export const Calculator = () => {
             <th colSpan={5}>
             <PrimaryButton  label={"Wygeneruj oferte"} onClick={() => {
               if (searchParams.toString() !== "")
-                navigate({ pathname: "oferta", search: searchParams.toString() });
+                navigate({ pathname: "../oferta", search: searchParams.toString() });
               else alert("Brak wybranych parametrów")
             }}></PrimaryButton>
             </th>

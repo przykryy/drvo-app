@@ -98,7 +98,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'assets/index.html',
       minify: {
-        minifyJS: true,
+        minifyJS: false,
         minifyCSS: true,
         removeComments: true,
         useShortDoctype: true,

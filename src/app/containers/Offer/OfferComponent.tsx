@@ -2,6 +2,7 @@ import React from 'react';
 import './offer.scss';
 import { useSearchParams } from 'react-router-dom';
 import { Parameter, parameters } from 'app/resources/parameters';
+import { Box, Container, Typography } from '@mui/material';
 interface IItemProps {
   parameter: Parameter;
   onChange: (value: string) => void;
@@ -15,17 +16,18 @@ export const Offer = () => {
   const viewModel: Parameter[] = mergeSearchParams(parameters, Object.fromEntries(searchParams.entries())).filter(x => safeParseFloat(x.quantity) > 0);
 
   return (
-    <div className='container'>
+    <Container id="offer" sx={{ py: { xs: 8, sm: 16 } }}>
+      <Box>
       <div className='flex-container'>
         <div className='company-info-container'>
           <img src={require("../../../assets/favicon.svg").default} className='company-logo'></img>
           <h3>Drvo</h3>
         </div>
         <div>
-          <p>Kazimierz Przybyłek</p>
-          <p>Oleksin 13, 08-130 Kotuń</p>
-          <p>tel: <a href="tel:+48509296202" >509 296 202</a></p>
-          <p>email: <a href="mailto:kontakt@drvo.pl" >kontakt@drvo.pl</a></p>
+          <Typography color="text.primary" variant="body2" fontWeight="bold">Kazimierz Przybyłek</Typography>
+          <Typography color="text.primary" variant="body2" fontWeight="bold">Oleksin 13, 08-130 Kotuń</Typography>
+          <Typography color="text.primary" variant="body2" fontWeight="bold">tel: <a href="tel:+48509296202" >509 296 202</a></Typography>
+          <Typography color="text.primary" variant="body2" fontWeight="bold">email: <a href="mailto:kontakt@drvo.pl" >kontakt@drvo.pl</a></Typography>
         </div>
       </div>
       <h2 style={{justifyContent: 'space-between', textAlign: 'center'}}>Oferta usługi montażu schodów</h2>
@@ -54,7 +56,8 @@ export const Offer = () => {
           ))}
         </tbody>
       </table>
-    </div>
+      </Box>
+    </Container>
   );
 
   function onChangeQuantity(item: Parameter) {
