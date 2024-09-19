@@ -1,156 +1,107 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
-.footer {
-  font-size: larger;
-}
-
-.print {
-  display: none;
-}
-
-@media print {
-  table th {
-    color: #333 !important;;
-  }
-}
-
-a[href^="tel:"] {
-  font-weight: bold;
-  color: #1a85f0;
-  text-decoration: none;
-}
-
-a[href^="mailto:"] {
-  font-weight: bold;
-  color: #1a85f0;
-  text-decoration: none;
-}
-
-
-input{
-  width: 60px;
-  height: 30px;
-  box-sizing: border-box;
+.offer-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
   font-family: Arial, sans-serif;
-  font-size: 14px;
-  border:0;
-  background: none;
-  border-bottom:1px solid #ccc;
-  outline:none;
-  border-radius: 0;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  touch-action: none;
-  &:focus,&:valid{
-    &~label{
-      color: #333;
-      transform: translateY(-20px);
-      font-size:0.825em;
-      cursor:cell;
+  color: #333;
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #0f5781;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    
+    &:hover {
+      background-color: #0a3f5f;
     }
   }
-  &:focus{
-    &~.underline{
-      width: 100%;
-    }
+
+  .flex-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
   }
-}
 
-input[type='number'] {
-  -moz-appearance:textfield;
-}
+  .company-info-container {
+    display: flex;
+    align-items: center;
+  }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
+  .company-logo {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+  }
 
-@media only screen and (max-width: 980px) {
+  .offer-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
   table {
-    width: 100%!important;
-    font-size: 24px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
   }
 
-  input {
-    font-size: 24px;
+  th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
   }
-}
 
-.container {
-  border-collapse: collapse;
-  margin: auto;
-  width: 80%;
-  color: #333;
-  font-family: Arial, sans-serif;
-  // font-size: 14px;
-  word-wrap: break-word;
+  th {
+    background-color: #0f5781;
+    color: white;
+  }
 
+  @media screen and (max-width: 768px) {
+    .flex-container {
+      flex-direction: column;
+      align-items: center;
+    }
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-  color: #333;
-  font-family: Arial, sans-serif;
-  // font-size: 14px;
-  word-wrap: break-word;
-}
+    .company-info-container, .contact-info {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
 
-table td {
-  background-color: #fff;
-  padding: 10px;
-  border: 1px solid #ccc;
-  font-weight: bold;
-  text-align: center;
-}
+    table {
+      font-size: 14px;
+    }
 
-table tr:nth-child(even) td {
-  background-color: #f2f2f2;
-}
+    th, td {
+      padding: 0.5rem;
+    }
 
-table tr:hover td {
-  background-color: #0f57812d;
-}
+    .back-link {
+      display: block;
+      text-align: center;
+    }
+  }
 
-table th {
-  background-color: #0f5781;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
-  padding: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 1px solid #ccc;
+  @media screen and (max-width: 480px) {
+    table {
+      font-size: 12px;
+    }
 
-}
-}
+    th, td {
+      padding: 0.25rem;
+    }
 
-.flex-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-/* Individual div styles */
-.info {
-  width: 48%; /* Adjust the width as needed */
-  border: 1px solid #ccc;
-  padding: 10px; /* Add padding for better visual appearance */
-}
-
-/* Flex container styles for company info */
-.company-info-container {
-  display: flex;
-  align-items: center; /* Center items vertically */
-}
-
-/* Style for the company logo */
-.company-logo {
-  width: 50px; /* Adjust the width as needed */
-  height: auto;
-  margin-right: 10px; /* Add some spacing between the image and the company name */
-}
-
-/* Style for the company name */
-.company-name {
-  font-size: 1.5em; /* Adjust the font size as needed */
+    .company-logo {
+      width: 40px;
+    }
+  }
 }

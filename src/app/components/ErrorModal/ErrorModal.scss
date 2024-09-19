@@ -1,0 +1,59 @@
+.error-modal {
+    &__overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7); // Ciemniejsze tło dla lepszego kontrastu
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+  
+    &__content {
+      background-color: #fff;
+      padding: 2rem; // Zmniejszono padding z 2.5rem
+      border-radius: 0.75rem; // Zmniejszono zaokrąglenie rogów
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); // Nieco mniejsze cieniowanie
+      max-width: 28rem; // Zmniejszono maksymalną szerokość z 32rem
+      width: 90%; // Responsywna szerokość
+      margin: 1rem;
+    }
+  
+    &__title {
+      font-size: 1.5rem; // Zmniejszono rozmiar czcionki z 1.75rem
+      font-weight: bold;
+      margin-bottom: 1rem; // Zmniejszono margines dolny
+      text-align: center;
+      color: #333; // Ciemniejszy kolor dla lepszej czytelności
+    }
+  
+    &__message {
+      margin-bottom: 1.5rem; // Zmniejszono margines dolny z 2rem
+      font-size: 1rem; // Zmniejszono rozmiar czcionki z 1.1rem
+      line-height: 1.5; // Poprawiono czytelność
+      color: #555; // Jaśniejszy kolor niż tytuł, ale wciąż czytelny
+    }
+  
+    &__actions {
+      display: flex;
+      justify-content: center; // Wycentrowano przycisk
+    }
+  
+    &__close-button {
+      padding: 0.6rem 1.5rem; // Zmniejszono padding przycisku
+      font-size: 1rem; // Zmniejszono rozmiar czcionki przycisku
+      border-radius: 0.5rem;
+      background-color: #007bff; // Dodano kolor tła
+      color: white; // Dodano kolor tekstu
+      border: none; // Usunięto obramowanie
+      cursor: pointer; // Dodano kursor wskazujący
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #0056b3; // Zmieniono na konkretny kolor
+      }
+    }
+  }

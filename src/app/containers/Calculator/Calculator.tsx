@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './calculator.scss';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PrimaryButton } from '../../components/Button/PrimaryButton';
 import { Parameter, parameters } from 'app/resources/parameters';
+import { ErrorModal } from 'app/components/ErrorModal/ErrorModal';
 
 interface IItemProps {
   parameter: Parameter;
   onChange: (value: string) => void;
 }
-
 
 export const Calculator = () => {
   const mergeSearchParams = (parameters: Parameter[], searchParams: { [x: string]: any; }) =>
@@ -17,6 +17,7 @@ export const Calculator = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const viewModel: Parameter[] = mergeSearchParams(parameters, Object.fromEntries(searchParams.entries()));
   const navigate = useNavigate();
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   return (
     <div className='app'>
@@ -37,11 +38,18 @@ export const Calculator = () => {
           </tr>
           <tr className="desktop">
             <th colSpan={5}>
-            <PrimaryButton  label={"Wygeneruj oferte"} onClick={() => {
-              if (searchParams.toString() !== "")
-                navigate({ pathname: "oferta", search: searchParams.toString() });
-              else alert("Brak wybranych parametrów")
-            }}></PrimaryButton>
+              <PrimaryButton
+                id="generate-offer-button"
+                className="generate-offer-button"
+                label="Wygeneruj ofertę"
+                onClick={() => {
+                  if (searchParams.toString() !== "") {
+                    navigate({ pathname: "oferta", search: searchParams.toString() });
+                  } else {
+                    setIsErrorModalOpen(true);
+                  }
+                }}
+              />
             </th>
           </tr>
         </tfoot>
@@ -54,14 +62,11 @@ export const Calculator = () => {
           ))}
         </tbody>
       </table>
-
-      {/* <table className="print">
-        <tr >
-          <th colSpan={2}></th>
-          <th colSpan={2}>Razem cena BRUTTO:</th>
-          <th className="footer" id="summary">{SumCost()} zł</th>
-        </tr>
-      </table> */}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        errorMessage="Proszę wprowadzić parametry przed wygenerowaniem oferty."
+      />
     </div>
   );
 
