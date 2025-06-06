@@ -1,4 +1,4 @@
-import * as React  from 'react';
+import * as React from 'react';
 import './Button.scss'; // Import the external CSS file for styling
 
 interface IButtonProps {
@@ -7,11 +7,28 @@ interface IButtonProps {
   label?: string;
   className?: string;
   id?: string;
+  disabled?: boolean;
+  'aria-label'?: string;
 }
 
-export const PrimaryButton: React.FC<IButtonProps> = ({ onClick, children, label, className, id }) => {
+export const PrimaryButton: React.FC<IButtonProps> = ({ 
+  onClick, 
+  children, 
+  label, 
+  className = '', 
+  id,
+  disabled = false,
+  'aria-label': ariaLabel 
+}) => {
   return (
-    <button className={`custom-button ${className || ''}`} onClick={onClick} id={id}>
+    <button 
+      className={`custom-button ${className}`}
+      onClick={onClick}
+      id={id}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      type="button"
+    >
       {label || children}
     </button>
   );
