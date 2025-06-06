@@ -1,102 +1,171 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import './offer.scss';
 import { useSearchParams, Link, useLocation } from 'react-router-dom';
 import { Parameter, parameters } from 'app/resources/parameters';
+import { formatCurrency } from '../../utils/formatters';
 
-interface IItemProps {
-  parameter: Parameter;
-  onChange: (value: string) => void;
+interface IOfferItemProps {
+  parameter: Parameter & { quantity: string };
 }
 
-const mergeSearchParams = (parameters: Parameter[], searchParams: { [x: string]: any; }) =>
-  parameters.map(param => ({ ...param, quantity: searchParams[param.name] ?? "" }));
+interface IOfferProps {
+  className?: string;
+}
 
-const safeParseFloat = (value: string) => {
-  const val = parseFloat(value);
-  return isNaN(val) ? 0 : val;
+const mergeSearchParams = (parameters: Parameter[], searchParams: URLSearchParams): Array<Parameter & { quantity: string }> => {
+  const paramsMap = Object.fromEntries(searchParams.entries());
+  return parameters
+    .map(param => ({ 
+      ...param, 
+      quantity: paramsMap[param.name] ?? "" 
+    }))
+    .filter(param => safeParseFloat(param.quantity) > 0);
 };
 
-export const Offer = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+const safeParseFloat = (value: string): number => {
+  if (!value || value.trim() === '') return 0;
+  const normalizedValue = value.replace(',', '.');
+  const parsed = parseFloat(normalizedValue);
+  return isNaN(parsed) ? 0 : Math.max(0, parsed);
+};
+
+export const Offer: React.FC<IOfferProps> = ({ className }) => {
+  const [searchParams] = useSearchParams();
   const location = useLocation();
-  const viewModel = useMemo(() => {
-    const mergedParams = mergeSearchParams(parameters, Object.fromEntries(searchParams.entries()));
-    return mergedParams.filter(x => safeParseFloat(x.quantity) > 0);
-  }, [searchParams]);
 
-  const onChangeQuantity = useCallback((item: Parameter) => {
-    return (quantity: string) => {
-      setSearchParams(sp => {
-        sp.set(item.name, quantity.replace(",", ".").toString());
-        return sp;
-      });
-    };
-  }, [setSearchParams]);
+  const viewModel = useMemo(() => 
+    mergeSearchParams(parameters, searchParams),
+    [searchParams]
+  );
 
-  const sumCost = useMemo(() => {
-    return Math.floor(viewModel.reduce((sum, x) => sum + x.price * safeParseFloat(x.quantity), 0));
-  }, [viewModel]);
+  const totalCost = useMemo(() => 
+    Math.floor(viewModel.reduce((sum, item) => 
+      sum + item.price * safeParseFloat(item.quantity), 0)
+    ),
+    [viewModel]
+  );
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
-    <div className='offer-container'>
-      <Link to={`/kalkulator${location.search}`} className="back-link">
-        Powrót do kalkulatora
-      </Link>
-      <div className='flex-container'>
-        <div className='company-info-container'>
-          <img src={require("../../../assets/favicon.svg").default} className='company-logo' alt="Logo firmy"></img>
-          <h3>Drvo</h3>
+    <div className={`offer-container ${className || ''}`}>
+      <div className="offer-header">
+        <Link 
+          to={`/kalkulator${location.search}`} 
+          className="back-link"
+          aria-label="Powrót do kalkulatora"
+        >
+          Powrót do kalkulatora
+        </Link>
+        <button 
+          onClick={handlePrint}
+          className="print-button"
+          aria-label="Drukuj ofertę"
+        >
+          Drukuj ofertę
+        </button>
+      </div>
+
+      <div className='company-section'>
+        <div className='company-info'>
+          <img 
+            src={require("../../../assets/favicon.svg").default} 
+            className='company-logo' 
+            alt="Logo firmy Drvo"
+          />
+          <div className="company-details">
+            <h1 className="company-name">Drvo</h1>
+            <div className='contact-info'>
+              <p>Kazimierz Przybyłek</p>
+              <p>Oleksin 13, 08-130 Kotuń</p>
+              <p>
+                <a href="tel:+48509296202" aria-label="Zadzwoń pod numer 509 296 202">
+                  tel: 509 296 202
+                </a>
+              </p>
+              <p>
+                <a href="mailto:kontakt@drvo.pl" aria-label="Wyślij email na adres kontakt@drvo.pl">
+                  email: kontakt@drvo.pl
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
-        <div className='contact-info'>
-          <p>Kazimierz Przybyłek</p>
-          <p>Oleksin 13, 08-130 Kotuń</p>
-          <p>tel: <a href="tel:+48509296202">509 296 202</a></p>
-          <p>email: <a href="mailto:kontakt@drvo.pl">kontakt@drvo.pl</a></p>
+        <div className="offer-meta">
+          <p className="offer-date">
+            Data wystawienia: {new Date().toLocaleDateString('pl-PL')}
+          </p>
+          <p className="offer-number">
+            Nr oferty: {new Date().getTime().toString().slice(-6)}
+          </p>
         </div>
       </div>
+
       <h2 className="offer-title">Oferta usługi montażu schodów</h2>
-      <div className="table-container">
-        <table>
+
+      <div className="table-container" role="region" aria-label="Szczegóły oferty">
+        <table role="grid" aria-label="Tabela parametrów i kosztów">
           <thead>
             <tr>
-              <th>Parametry</th>
-              <th>J.m.</th>
-              <th>Cena</th>
-              <th>Liczba</th>
-              <th>Cena usługi</th>
+              <th scope="col">Parametry</th>
+              <th scope="col">J.m.</th>
+              <th scope="col">Cena</th>
+              <th scope="col">Liczba</th>
+              <th scope="col">Cena usługi</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th colSpan={4}>Suma:</th>
-              <th className="footer" id="summary">{sumCost} zł</th>
-            </tr>
-          </tfoot>
-          <tbody id="content">
-            {viewModel.map((parameter: Parameter, index: React.Key) => (
-              <ItemCalculator
-                key={index}
+          <tbody>
+            {viewModel.map((parameter) => (
+              <OfferItem
+                key={parameter.name}
                 parameter={parameter}
-                onChange={onChangeQuantity(parameter)} />
+              />
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colSpan={4}>Suma:</th>
+              <td className="total-value" aria-live="polite">
+                {formatCurrency(totalCost)}
+              </td>
+            </tr>
+          </tfoot>
         </table>
+      </div>
+
+      <div className="offer-footer">
+        <div className="terms">
+          <h3>Warunki oferty:</h3>
+          <ul>
+            <li>Oferta ważna przez 30 dni od daty wystawienia</li>
+            <li>Ceny zawierają podatek VAT</li>
+            <li>Termin realizacji do uzgodnienia</li>
+          </ul>
+        </div>
+        <div className="signature">
+          <p>Podpis osoby upoważnionej</p>
+          <div className="signature-line"></div>
+        </div>
       </div>
     </div>
   );
 };
 
-const ItemCalculator = React.memo((props: IItemProps) => {
-  const { parameter: { description, unit, price, quantity } } = props;
-  const cost = Math.floor(safeParseFloat(quantity) * price);
+const OfferItem: React.FC<IOfferItemProps> = React.memo(({ parameter }) => {
+  const { description, unit, price, quantity } = parameter;
+  const totalPrice = Math.floor(safeParseFloat(quantity) * price);
   
   return (
     <tr>
-      <td>{description}</td>
-      <td>{unit}</td>
-      <td>{price}</td>
-      <td>{quantity}</td>
-      <td>{cost}</td>
+      <td data-label="Parametr">{description}</td>
+      <td data-label="Jednostka">{unit}</td>
+      <td data-label="Cena">{formatCurrency(price)}</td>
+      <td data-label="Liczba">{quantity}</td>
+      <td data-label="Cena usługi">{formatCurrency(totalPrice)}</td>
     </tr>
   );
 });
+
+OfferItem.displayName = 'OfferItem';

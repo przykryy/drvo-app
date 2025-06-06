@@ -2,8 +2,35 @@
 
 $primary: #0f5781;
 $primary-dark: #0a3f5f;
+$primary-light: rgba($primary, 0.1);
 $text: #333;
+$text-light: #666;
 $border: #ddd;
+$border-radius: 8px;
+$spacing-unit: 8px;
+$transition-duration: 0.3s;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition {
+  transition: all $transition-duration ease;
+}
+
+@mixin focus-ring {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($primary, 0.4);
+  }
+}
+
+// Mobile Breakpoints
+$mobile-breakpoint: 480px;
+$tablet-breakpoint: 768px;
 
 .offer-container {
   width: 90%;
@@ -11,80 +38,434 @@ $border: #ddd;
   margin: 2rem auto;
   font-family: 'Roboto', sans-serif;
   color: $text;
+  background: white;
+  padding: $spacing-unit * 2;
+  border-radius: $border-radius;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  .back-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    background-color: $primary;
-    color: #fff;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    
-    &:hover { background-color: $primary-dark; }
-  }
-
-  .flex-container {
+  .offer-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    align-items: center;
+    margin-bottom: $spacing-unit * 3;
+    gap: $spacing-unit * 2;
   }
 
-  .company-info-container {
-    display: flex;
+  .back-link {
+    display: inline-flex;
     align-items: center;
+    padding: $spacing-unit * 1.5 $spacing-unit * 2;
+    background-color: $primary;
+    color: white;
+    border-radius: $border-radius;
+    text-decoration: none;
+    font-weight: 500;
+    @include transition;
+    
+    &:hover {
+      background-color: $primary-dark;
+      transform: translateY(-1px);
+    }
+  }
+
+  .print-button {
+    padding: $spacing-unit * 1.5 $spacing-unit * 2;
+    background-color: white;
+    color: $primary;
+    border: 2px solid $primary;
+    border-radius: $border-radius;
+    font-weight: 500;
+    cursor: pointer;
+    @include transition;
+
+    &:hover {
+      background-color: $primary-light;
+      transform: translateY(-1px);
+    }
+  }
+
+  .company-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-unit * 4;
+    padding-bottom: $spacing-unit * 3;
+    border-bottom: 1px solid $border;
+  }
+
+  .company-info {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-unit * 2;
   }
 
   .company-logo {
-    width: 50px;
+    width: 60px;
     height: auto;
-    margin-right: 10px;
   }
 
-  .offer-title { text-align: center; margin-bottom: 1.5rem; }
+  .company-details {
+    .company-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $primary;
+      margin: 0 0 $spacing-unit * 1.5;
+    }
+  }
+
+  .contact-info {
+    p {
+      margin: $spacing-unit * 0.5 0;
+      color: $text-light;
+      font-size: 0.95rem;
+
+      a {
+        color: $primary;
+        text-decoration: none;
+        @include transition;
+
+        &:hover {
+          color: $primary-dark;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .offer-meta {
+    text-align: right;
+    color: $text-light;
+    font-size: 0.9rem;
+
+    p {
+      margin: $spacing-unit * 0.5 0;
+    }
+  }
+
+  .offer-title {
+    text-align: center;
+    font-size: 1.75rem;
+    color: $primary;
+    margin: $spacing-unit * 3 0;
+    font-weight: 600;
+  }
+
+  .table-container {
+    margin: $spacing-unit * 3 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
   table {
-    width: 80%;
-    max-width: 100vw;
+    width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    margin-bottom: 1rem;
-    border: 1px solid $border; // Dodaj tę linię, aby dodać ramkę wokół tabeli
+    border: 1px solid $border;
+    border-radius: $border-radius;
+    overflow: hidden;
 
     th, td {
-      padding: 0.75rem;
+      padding: $spacing-unit * 1.5;
       text-align: left;
       border-bottom: 1px solid $border;
       border-right: 1px solid $border;
-      &:last-child { border-right: none; }
+
+      &:last-child {
+        border-right: none;
+      }
     }
 
     th {
       background-color: $primary;
       color: white;
-      border-bottom: 2px solid $primary-dark;
+      font-weight: 500;
+      white-space: nowrap;
     }
 
-    tr:last-child td { border-bottom: none; }
+    tbody tr {
+      @include transition;
+
+      &:hover {
+        background-color: $primary-light;
+      }
+
+      td {
+        vertical-align: middle;
+      }
+    }
+
+    .total-value {
+      font-weight: 600;
+      color: $primary;
+      font-size: 1.1rem;
+    }
   }
 
-  @media print {
+  .offer-footer {
+    margin-top: $spacing-unit * 4;
+    padding-top: $spacing-unit * 3;
+    border-top: 1px solid $border;
+    display: flex;
+    justify-content: space-between;
+    gap: $spacing-unit * 4;
+
+    .terms {
+      flex: 1;
+
+      h3 {
+        color: $primary;
+        margin-bottom: $spacing-unit * 1.5;
+        font-size: 1.1rem;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          margin-bottom: $spacing-unit;
+          color: $text-light;
+          position: relative;
+          padding-left: $spacing-unit * 2;
+
+          &:before {
+            content: "•";
+            color: $primary;
+            position: absolute;
+            left: 0;
+          }
+        }
+      }
+    }
+
+    .signature {
+      text-align: center;
+      min-width: 200px;
+
+      p {
+        color: $text-light;
+        margin-bottom: $spacing-unit * 2;
+      }
+
+      .signature-line {
+        width: 200px;
+        height: 1px;
+        background-color: $border;
+        margin: $spacing-unit * 4 auto 0;
+      }
+    }
+  }
+}
+
+// Mobile Styles
+@media (max-width: $mobile-breakpoint) {
+  .offer-container {
+    width: 100%;
+    margin: 0;
+    padding: $spacing-unit;
+    border-radius: 0;
+    box-shadow: none;
+
+    .offer-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $spacing-unit;
+    }
+
+    .back-link, .print-button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .company-section {
+      flex-direction: column;
+      gap: $spacing-unit * 2;
+    }
+
+    .company-info {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .company-details {
+      .company-name {
+        text-align: center;
+      }
+    }
+
+    .contact-info {
+      text-align: center;
+    }
+
+    .offer-meta {
+      text-align: center;
+    }
+
+    .offer-title {
+      font-size: 1.5rem;
+      margin: $spacing-unit * 2 0;
+    }
+
+    table {
+      th, td {
+        padding: $spacing-unit;
+        font-size: 0.9rem;
+
+        &[data-label] {
+          text-align: right;
+          padding-left: 50%;
+
+          &:before {
+            content: attr(data-label);
+            position: absolute;
+            left: $spacing-unit;
+            width: 45%;
+            white-space: nowrap;
+            text-align: left;
+            font-weight: 600;
+          }
+        }
+      }
+
+      tr {
+        position: relative;
+        display: block;
+        margin-bottom: $spacing-unit * 2;
+        border: 1px solid $border;
+        border-radius: $border-radius;
+
+        td {
+          display: block;
+          border: none;
+          border-bottom: 1px solid $border;
+          position: relative;
+          padding-left: 50%;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+
+      thead {
+        display: none;
+      }
+    }
+
+    .offer-footer {
+      flex-direction: column;
+      gap: $spacing-unit * 3;
+
+      .terms {
+        text-align: center;
+
+        ul li {
+          text-align: left;
+        }
+      }
+
+      .signature {
+        .signature-line {
+          width: 150px;
+        }
+      }
+    }
+  }
+}
+
+// Tablet Styles
+@media screen and (min-width: #{$mobile-breakpoint + 1}) and (max-width: $tablet-breakpoint) {
+  .offer-container {
+    width: 95%;
+    padding: $spacing-unit * 1.5;
+
+    .company-section {
+      flex-direction: column;
+      gap: $spacing-unit * 2;
+    }
+
+    .offer-meta {
+      text-align: left;
+    }
+
+    .offer-footer {
+      flex-direction: column;
+      gap: $spacing-unit * 3;
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .offer-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
     color: black;
-    .back-link { display: none !important; }
-    .table-container { overflow-x: visible; }
+
+    .offer-header {
+      display: none;
+    }
+
+    .company-section {
+      border-bottom: 1px solid black;
+    }
+
+    .company-details .company-name {
+      color: black;
+    }
+
+    .contact-info p, .offer-meta {
+      color: black;
+    }
+
+    .offer-title {
+      color: black;
+    }
+
     table {
       border: 1px solid black;
       
       th, td {
         border: 1px solid black;
         color: black;
+        padding: $spacing-unit;
       }
       
       th {
         background-color: white !important;
         color: black !important;
       }
+    }
+
+    .offer-footer {
+      border-top: 1px solid black;
+
+      .terms h3 {
+        color: black;
+      }
+
+      .terms li {
+        color: black;
+
+        &:before {
+          color: black;
+        }
+      }
+
+      .signature {
+        .signature-line {
+          background-color: black;
+        }
+      }
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
     }
   }
 }
