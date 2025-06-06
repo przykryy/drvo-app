@@ -1,143 +1,105 @@
-.footer {
-  font-size: larger
+// Zmienne
+$primary-color: #0f5781;
+$hover-color: #0a3f5f;
+$bg-light: #f9f9f9;
+$bg-white: #fff;
+$text-dark: #333;
+$text-light: #999;
+
+// Mixiny
+@mixin transition {
+  transition: all 0.3s ease;
 }
 
-.print {
-  display: none
+// Style globalne
+body {
+  font-family: Arial, sans-serif;
+  color: $text-dark;
 }
 
-@media print {
-  .print {
-    display: block
+// Tabela
+table {
+  width: 80%;
+  max-width: 100vw;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 2rem auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 10px;
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
   }
 
-  .desktop {
-    display: none !important
+  th {
+    background-color: $primary-color;
+    color: $bg-white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  table {
-    width: 100% !important;
-    padding: none !important;
-    font-size: small !important
-  }
-
-  table td {
-    padding: none !important
-  }
-
-  table th {
-    padding: none !important
+  tr {
+    &:nth-child(even) td {
+      background-color: $bg-light;
+    }
+    &:hover td {
+      background-color: rgba($primary-color, 0.1);
+    }
   }
 }
 
+// Inputy
 input {
-  width: 100px; // Zwiększono szerokość
-  height: 40px; // Zwiększono wysokość
+  width: 100px;
+  height: 1.5rem;
   padding: 8px 12px;
   font-size: 16px;
-  border: 2px solid #0f5781; // Wyraźniejsza obwódka
+  border: 2px solid $primary-color;
   border-radius: 4px;
-  transition: all 0.3s ease;
-  background-color: #f9f9f9; // Jasne tło
-  color: #333; // Ciemny kolor tekstu
+  @include transition;
+  background-color: $bg-light;
+  color: $text-dark;
+
+  &:hover, &:focus {
+    border-color: $hover-color;
+    background-color: $bg-white;
+  }
+
+  &:focus {
+    box-shadow: 0 0 8px rgba($primary-color, 0.4);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $text-light;
+  }
+
+  &[type='number'] {
+    -moz-appearance: textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+  }
 }
 
-input:hover {
-  border-color: #0a3f5f; // Ciemniejszy kolor przy najechaniu
-  background-color: #fff; // Białe tło przy najechaniu
-}
-
-input:focus {
-  border-color: #0a3f5f;
-  box-shadow: 0 0 8px rgba(15, 87, 129, 0.4);
-  background-color: #fff;
-  outline: none; // Usuwa domyślny outline przeglądarki
-}
-
-input::placeholder {
-  color: #999; // Jaśniejszy kolor dla placeholdera
-}
-
-input[type='number'] {
-  -moz-appearance: textfield
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none
+// Media queries
+@media print {
+  .print { display: block; }
+  .desktop { display: none !important; }
+  table {
+    width: 100% !important;
+    font-size: small !important;
+  }
 }
 
 @media only screen and (max-width: 980px) {
   table {
-    width: 95%;
     font-size: 16px;
   }
-
   input {
     width: 70px;
-    font-size: 16px;
   }
-}
-
-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 2rem auto;
-  width: 90%;
-  max-width: 1200px;
-  color: #333;
-  font-family: Arial, sans-serif;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-table th {
-  background-color: #0f5781;
-  color: #fff;
-  text-align: left;
-  font-weight: bold;
-  padding: 15px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-table td {
-  background-color: #fff;
-  padding: 12px 15px;
-  border-bottom: 1px solid #eee;
-  font-weight: normal;
-  text-align: left;
-}
-
-table tr:last-child td {
-  border-bottom: none;
-}
-
-table tr:nth-child(even) td {
-  background-color: #f8f8f8;
-}
-
-table tr:hover td {
-  background-color: #f0f7fc;
-}
-
-table tr:nth-child(even) td {
-  background-color: #f2f2f2
-}
-
-table tr:hover td {
-  background-color: #0f57812d
-}
-
-table th {
-  background-color: #0f5781;
-  color: #fff;
-  text-align: center;
-  font-weight: bold;
-  padding: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-top: 1px solid #fff;
-  border-bottom: 1px solid #ccc
 }

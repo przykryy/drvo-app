@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { Calculator } from './app/containers/Calculator/Calculator';
 import { Offer } from './app/containers/Offer/OfferComponent';
+import CalculatorV2 from 'app/containers/CalculatorV2/calculator-v2';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <Calculator/>,
+  },
+  {
+    path: "/params",
+    element: <CalculatorV2/>,
   }
 ]);
 

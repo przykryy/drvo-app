@@ -1,0 +1,35 @@
+
+$primary-color: #0f5781;
+$hover-color: #0a3f5f;
+$bg-light: #f9f9f9;
+$bg-white: #fff;
+$text-dark: #333;
+
+.parameters-page {
+  margin: 2rem;
+
+  .parameters-group {
+    margin-bottom: 1rem;
+
+    label {
+      margin-right: 1rem;
+      color: $text-dark;
+      font-weight: bold;
+    }
+
+    select {
+      padding: 12px 15px;
+      border: 2px solid $primary-color;
+      border-radius: 4px;
+      background-color: $bg-light;
+      color: $text-dark;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+
+      &:hover, &:focus {
+        border-color: $hover-color;
+        background-color: $bg-white;
+      }
+    }
+  }
+}
