@@ -40,7 +40,7 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
 
   const handleGenerateOffer = useCallback(() => {
     if (hasValidInputs) {
-      navigate({ pathname: "oferta", search: searchParams.toString() });
+      navigate({ pathname: "/oferta", search: searchParams.toString() });
     } else {
       setIsErrorModalOpen(true);
     }

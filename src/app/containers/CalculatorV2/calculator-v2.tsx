@@ -9,82 +9,188 @@ interface ICalculatorV2Props {
   className?: string;
 }
 
+interface ParameterSelection {
+  name: string;
+  quantity: string;
+  id: string;
+}
+
 const CalculatorV2: React.FC<ICalculatorV2Props> = ({ className }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-  const [inputErrors, setInputErrors] = useState<Record<string, boolean>>({});
-
-  // Memoized selected parameters with quantities
-  const selectedParameters = useMemo(() => {
-    const params: Record<string, { name: string; quantity: string }> = {};
+  const [inputErrors, setInputErrors] = useState<Record<string, Record<string, boolean>>>({});
+  const [selections, setSelections] = useState<Record<string, ParameterSelection[]>>(() => {
+    // Initialize from URL params
+    const initialSelections: Record<string, ParameterSelection[]> = {};
+    
+    // First, initialize all groups with empty selections
     Object.keys(parametersGrouped).forEach(group => {
-      const paramName = searchParams.get(`${group}-name`) || '';
-      const quantity = searchParams.get(`${group}-quantity`) || '';
-      if (paramName) {
-        params[group] = { name: paramName, quantity };
+      initialSelections[group] = [{ 
+        id: `${group}-0`,
+        name: '', 
+        quantity: '' 
+      }];
+    });
+    
+    // Then handle old format parameters (e.g., kolor-name=bejca)
+    Object.keys(parametersGrouped).forEach(group => {
+      const name = searchParams.get(`${group}-name`);
+      const quantity = searchParams.get(`${group}-quantity`);
+      if (name) {
+        initialSelections[group] = [{
+          id: `${group}-0`,
+          name,
+          quantity: quantity || '1'
+        }];
       }
     });
-    return params;
-  }, [searchParams]);
+    
+    // Then process new format parameters (e.g., kolor-0-name=lakierowanie_olejowanie)
+    const groupedParams: Record<string, Array<{index: string, name: string, quantity: string, id: string}>> = {};
+    
+    searchParams.forEach((value, key) => {
+      // Skip empty values and old format parameters
+      if (!value || !key.includes('-')) return;
+      
+      // Parse the key (e.g., "kolor-0-name" -> {group: "kolor", index: "0", type: "name"})
+      const match = key.match(/^([a-z_]+)-(\d+)-([a-z]+)$/);
+      if (!match) return;
+      
+      const [, group, index, type] = match;
+      if (!groupedParams[group]) {
+        groupedParams[group] = [];
+      }
+      
+      // Find or create the entry for this group and index
+      let entry = groupedParams[group].find(e => e.index === index);
+      if (!entry) {
+        entry = { index, name: '', quantity: '', id: '' };
+        groupedParams[group].push(entry);
+      }
+      
+      // Update the appropriate field
+      if (type === 'name') entry.name = value;
+      if (type === 'quantity') entry.quantity = value;
+      if (type === 'id') entry.id = value;
+    });
+    
+    // Convert grouped parameters to selections
+    Object.entries(groupedParams).forEach(([group, entries]) => {
+      // Sort by index to maintain order
+      entries.sort((a, b) => parseInt(a.index) - parseInt(b.index));
+      
+      // Convert to ParameterSelection format
+      const groupSelections = entries.map(entry => ({
+        id: entry.id || `${group}-${entry.index}`,
+        name: entry.name,
+        quantity: entry.quantity
+      }));
+      
+      // If we already have selections from old format, merge them
+      if (initialSelections[group]?.[0]?.name) {
+        // Remove any duplicates (based on name)
+        const existingNames = new Set(initialSelections[group].map(s => s.name));
+        const newSelections = groupSelections.filter(s => !existingNames.has(s.name));
+        initialSelections[group] = [...initialSelections[group], ...newSelections];
+      } else if (groupSelections.some(s => s.name)) {
+        initialSelections[group] = groupSelections;
+      }
+    });
+    
+    console.log('Initialized selections:', initialSelections);
+    return initialSelections;
+  });
 
   // Calculate total cost
   const totalCost = useMemo(() => {
-    return Object.entries(selectedParameters).reduce((total, [group, { name, quantity }]) => {
-      if (!name) return total;
-      const param = parametersGrouped[group].find(p => p.name === name);
-      return total + (param?.price || 0) * safeParseFloat(quantity);
+    return Object.entries(selections).reduce((total, [group, groupSelections]) => {
+      return total + groupSelections.reduce((groupTotal, { name, quantity }) => {
+        if (!name) return groupTotal;
+        const param = parametersGrouped[group].find(p => p.name === name);
+        return groupTotal + (param?.price || 0) * safeParseFloat(quantity);
+      }, 0);
     }, 0);
-  }, [selectedParameters]);
+  }, [selections]);
 
   const hasValidSelections = useMemo(() => {
-    return Object.values(selectedParameters).some(({ name, quantity }) => 
-      name && safeParseFloat(quantity) > 0
+    return Object.values(selections).some(groupSelections => 
+      groupSelections.some(({ name, quantity }) => name && safeParseFloat(quantity) > 0)
     );
-  }, [selectedParameters]);
+  }, [selections]);
 
-  const handleSelectChange = useCallback((group: string, value: string) => {
-    setSearchParams(sp => {
-      const newSp = new URLSearchParams(sp);
-      if (!value) {
-        newSp.delete(`${group}-name`);
-        newSp.delete(`${group}-quantity`);
-      } else {
-        newSp.set(`${group}-name`, value);
-        // Initialize quantity to 1 if not set
-        if (!newSp.has(`${group}-quantity`)) {
-          newSp.set(`${group}-quantity`, '1');
-        }
+  const handleSelectChange = useCallback((group: string, value: string, selectionId: string) => {
+    setSelections(prev => {
+      const groupSelections = [...(prev[group] || [])];
+      const index = groupSelections.findIndex(s => s.id === selectionId);
+      if (index !== -1) {
+        groupSelections[index] = {
+          ...groupSelections[index],
+          name: value,
+          quantity: value ? (groupSelections[index].quantity || '1') : ''
+        };
       }
-      return newSp;
+      return { ...prev, [group]: groupSelections };
     });
-  }, [setSearchParams]);
+  }, []);
 
-  const handleQuantityChange = useCallback((group: string, quantity: string) => {
-    // Validate input
+  const handleQuantityChange = useCallback((group: string, quantity: string, selectionId: string) => {
     const isValid = validateInput(quantity);
-    setInputErrors(prev => ({ ...prev, [group]: !isValid }));
+    setInputErrors(prev => ({
+      ...prev,
+      [group]: { ...(prev[group] || {}), [selectionId]: !isValid }
+    }));
 
     if (isValid) {
-      setSearchParams(sp => {
-        const newSp = new URLSearchParams(sp);
-        if (quantity === '' || safeParseFloat(quantity) === 0) {
-          newSp.delete(`${group}-quantity`);
-        } else {
-          newSp.set(`${group}-quantity`, quantity.replace(',', '.'));
+      setSelections(prev => {
+        const groupSelections = [...(prev[group] || [])];
+        const index = groupSelections.findIndex(s => s.id === selectionId);
+        if (index !== -1) {
+          groupSelections[index] = {
+            ...groupSelections[index],
+            quantity: quantity === '' ? '' : quantity.replace(',', '.')
+          };
         }
-        return newSp;
+        return { ...prev, [group]: groupSelections };
       });
     }
-  }, [setSearchParams]);
+  }, []);
+
+  const handleAddSelection = useCallback((group: string) => {
+    setSelections(prev => {
+      const groupSelections = [...(prev[group] || [])];
+      // Use timestamp to ensure unique ID
+      const newId = `${group}-${Date.now()}`;
+      groupSelections.push({ id: newId, name: '', quantity: '' });
+      return { ...prev, [group]: groupSelections };
+    });
+  }, []);
+
+  const handleRemoveSelection = useCallback((group: string, selectionId: string) => {
+    setSelections(prev => {
+      const groupSelections = prev[group].filter(s => s.id !== selectionId);
+      return { ...prev, [group]: groupSelections };
+    });
+  }, []);
 
   const handleGenerateOffer = useCallback(() => {
     if (hasValidSelections) {
-      navigate({ pathname: "/oferta", search: searchParams.toString() });
+      // Convert selections to URL params
+      const newSearchParams = new URLSearchParams();
+      Object.entries(selections).forEach(([group, groupSelections]) => {
+        groupSelections.forEach((selection, index) => {
+          if (selection.name) {
+            newSearchParams.set(`${group}-${index}-name`, selection.name);
+            newSearchParams.set(`${group}-${index}-quantity`, selection.quantity);
+            newSearchParams.set(`${group}-${index}-id`, selection.id);
+          }
+        });
+      });
+      navigate({ pathname: "/oferta", search: newSearchParams.toString() });
     } else {
       setIsErrorModalOpen(true);
     }
-  }, [hasValidSelections, navigate, searchParams]);
+  }, [hasValidSelections, navigate, selections]);
 
   return (
     <div className={`calculator-v2-container ${className || ''}`}>
@@ -93,65 +199,86 @@ const CalculatorV2: React.FC<ICalculatorV2Props> = ({ className }) => {
       <div className="parameters-wrapper">
         {Object.entries(parametersGrouped).map(([group, parameters]) => (
           <div key={group} className="parameter-group">
-            <label htmlFor={`select-${group}`} className="parameter-label">
+            <label className="parameter-label">
               {group.charAt(0).toUpperCase() + group.slice(1)}:
             </label>
-            <div className="select-wrapper">
-              <select
-                id={`select-${group}`}
-                className={`parameter-select ${inputErrors[group] ? 'input-error' : ''}`}
-                value={selectedParameters[group]?.name || ''}
-                onChange={e => handleSelectChange(group, e.target.value)}
-                aria-label={`Wybierz ${group}`}
-                aria-invalid={inputErrors[group]}
-              >
-                <option value="">Wybierz opcję</option>
-                {parameters.map(param => (
-                  <option key={param.name} value={param.name}>
-                    {param.description} - {formatCurrency(param.price)}
-                  </option>
-                ))}
-              </select>
-              {selectedParameters[group]?.name && (
-                <div className="parameter-details">
-                  <div className="parameter-info">
-                    <span className="parameter-unit">
-                      {parameters.find(p => p.name === selectedParameters[group]?.name)?.unit}
-                    </span>
-                    <span className="parameter-price">
-                      {formatCurrency(parameters.find(p => p.name === selectedParameters[group]?.name)?.price || 0)}
-                    </span>
-                  </div>
-                  <div className="quantity-input-wrapper">
-                    <label htmlFor={`quantity-${group}`} className="quantity-label">
-                      Liczba:
-                    </label>
-                    <input
-                      id={`quantity-${group}`}
-                      className={`quantity-input ${inputErrors[group] ? 'input-error' : ''}`}
-                      type="text"
-                      inputMode="decimal"
-                      pattern="[0-9]*[.,]?[0-9]*"
-                      value={selectedParameters[group]?.quantity || ''}
-                      onChange={e => handleQuantityChange(group, e.target.value)}
-                      aria-label={`Liczba dla ${group}`}
-                      aria-invalid={inputErrors[group]}
-                      placeholder="0"
-                    />
-                    {inputErrors[group] && (
-                      <div className="error-message" role="alert">
-                        Nieprawidłowa wartość
+            <div className="selections-container">
+              {(selections[group] || []).map((selection, idx) => (
+                <div key={selection.id} className="selection-item">
+                  <div className="select-wrapper">
+                    <select
+                      className={`parameter-select ${inputErrors[group]?.[selection.id] ? 'input-error' : ''}`}
+                      value={selection.name}
+                      onChange={e => handleSelectChange(group, e.target.value, selection.id)}
+                      aria-label={`Wybierz ${group} ${idx + 1}`}
+                      aria-invalid={inputErrors[group]?.[selection.id]}
+                    >
+                      <option value="">Wybierz opcję</option>
+                      {parameters.map(param => (
+                        <option key={param.name} value={param.name}>
+                          {param.description} - {formatCurrency(param.price)}
+                        </option>
+                      ))}
+                    </select>
+                    {idx > 0 && (
+                      <button
+                        className="remove-selection-button"
+                        onClick={() => handleRemoveSelection(group, selection.id)}
+                        aria-label={`Usuń wybór ${idx + 1}`}
+                      >
+                        ×
+                      </button>
+                    )}
+                    {selection.name && (
+                      <div className="parameter-details">
+                        <div className="parameter-info">
+                          <span className="parameter-unit">
+                            {parameters.find(p => p.name === selection.name)?.unit}
+                          </span>
+                          <span className="parameter-price">
+                            {formatCurrency(parameters.find(p => p.name === selection.name)?.price || 0)}
+                          </span>
+                        </div>
+                        <div className="quantity-input-wrapper">
+                          <label className="quantity-label">
+                            Liczba:
+                          </label>
+                          <input
+                            className={`quantity-input ${inputErrors[group]?.[selection.id] ? 'input-error' : ''}`}
+                            type="text"
+                            inputMode="decimal"
+                            pattern="[0-9]*[.,]?[0-9]*"
+                            value={selection.quantity}
+                            onChange={e => handleQuantityChange(group, e.target.value, selection.id)}
+                            aria-label={`Liczba dla ${group} ${idx + 1}`}
+                            aria-invalid={inputErrors[group]?.[selection.id]}
+                            placeholder="0"
+                          />
+                          {inputErrors[group]?.[selection.id] && (
+                            <div className="error-message" role="alert">
+                              Nieprawidłowa wartość
+                            </div>
+                          )}
+                        </div>
+                        <div className="parameter-total">
+                          Suma: {formatCurrency(
+                            (parameters.find(p => p.name === selection.name)?.price || 0) *
+                            safeParseFloat(selection.quantity || '0')
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
-                  <div className="parameter-total">
-                    Suma: {formatCurrency(
-                      (parameters.find(p => p.name === selectedParameters[group]?.name)?.price || 0) *
-                      safeParseFloat(selectedParameters[group]?.quantity || '0')
-                    )}
-                  </div>
                 </div>
-              )}
+              ))}
+              <button
+                className="add-selection-button"
+                onClick={() => handleAddSelection(group)}
+                type="button"
+                aria-label={`Dodaj kolejny wybór dla ${group}`}
+              >
+                + Dodaj kolejny
+              </button>
             </div>
           </div>
         ))}

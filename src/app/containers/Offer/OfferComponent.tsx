@@ -70,11 +70,7 @@ export const Offer: React.FC<IOfferProps> = ({ className }) => {
 
       <div className='company-section'>
         <div className='company-info'>
-          <img 
-            src={require("../../../assets/favicon.svg").default} 
-            className='company-logo' 
-            alt="Logo firmy Drvo"
-          />
+          <img src="/favicon.svg" alt="Drvo logo" className="company-logo" />
           <div className="company-details">
             <h1 className="company-name">Drvo</h1>
             <div className='contact-info'>
@@ -140,13 +136,8 @@ export const Offer: React.FC<IOfferProps> = ({ className }) => {
           <h3>Warunki oferty:</h3>
           <ul>
             <li>Oferta ważna przez 30 dni od daty wystawienia</li>
-            <li>Ceny zawierają podatek VAT</li>
             <li>Termin realizacji do uzgodnienia</li>
           </ul>
-        </div>
-        <div className="signature">
-          <p>Podpis osoby upoważnionej</p>
-          <div className="signature-line"></div>
         </div>
       </div>
     </div>

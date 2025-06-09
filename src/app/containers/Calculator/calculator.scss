@@ -8,6 +8,10 @@ $bg-white: #fff;
 $text-dark: #333;
 $text-light: #666;
 $border-radius: 8px;
+$border-width: 1px;
+$border-color: rgba($primary-color, 0.2);
+$border-color-hover: $primary-color;
+$border-color-error: $error-color;
 $spacing-unit: 8px;
 $transition-duration: 0.3s;
 
@@ -110,12 +114,15 @@ $tablet-breakpoint: 768px;
   overflow-x: auto;
   background: $bg-white;
   border-radius: $border-radius;
+  border: $border-width solid $border-color;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin: 0 -$spacing-unit; // Negative margin for full-width on mobile
+  margin: 0 -$spacing-unit;
 
   @media (max-width: $mobile-breakpoint) {
     margin: 0;
     border-radius: 0;
+    border-left: none;
+    border-right: none;
     box-shadow: none;
   }
 }
@@ -131,7 +138,7 @@ table {
   th, td {
     padding: $spacing-unit * 2;
     text-align: left;
-    border-bottom: 1px solid rgba($primary-color, 0.1);
+    border-bottom: $border-width solid $border-color;
   }
 
   th {
@@ -141,6 +148,7 @@ table {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
+    border-bottom: $border-width solid darken($primary-color, 10%);
 
     &[scope="col"] {
       position: sticky;
@@ -181,7 +189,7 @@ table {
 .quantity-input {
   width: 100px;
   padding: $spacing-unit;
-  border: 2px solid rgba($primary-color, 0.2);
+  border: $border-width solid $border-color;
   border-radius: $border-radius;
   font-size: 1rem;
   text-align: center;
@@ -191,11 +199,11 @@ table {
   @include focus-ring;
 
   &:hover {
-    border-color: $primary-color;
+    border-color: $border-color-hover;
   }
 
   &.input-error {
-    border-color: $error-color;
+    border-color: $border-color-error;
     background-color: rgba($error-color, 0.05);
   }
 
@@ -263,13 +271,31 @@ table {
 
   table {
     @include mobile-table;
+
+    tr {
+      border: $border-width solid $border-color;
+      margin-bottom: $spacing-unit;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    td {
+      border-bottom: $border-width solid $border-color;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
   }
 
   .quantity-input {
-    width: 100px;
-    max-width: 100%;
-    padding: $spacing-unit;
-    font-size: 1rem;
+    border: $border-width solid $border-color;
+    
+    &:hover {
+      border-color: $border-color-hover;
+    }
   }
 
   .generate-offer-button {
@@ -319,6 +345,7 @@ table {
   }
 
   .table-wrapper {
+    border: $border-width solid $text-dark;
     box-shadow: none;
   }
 
@@ -328,16 +355,20 @@ table {
     th {
       background-color: $bg-white !important;
       color: $text-dark !important;
-      border-bottom: 2px solid $text-dark;
+      border-bottom: $border-width solid $text-dark;
     }
 
     .desktop {
       display: none !important;
     }
+
+    td {
+      border-bottom: $border-width solid $border-color;
+    }
   }
 
   .quantity-input {
-    border: 1px solid $text-dark;
+    border: $border-width solid $text-dark;
   }
 }
 
