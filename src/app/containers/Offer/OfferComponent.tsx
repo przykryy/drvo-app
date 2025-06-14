@@ -212,7 +212,7 @@ const OfferTable: React.FC<{
       </tbody>
       <tfoot>
         <tr>
-          <th scope="row" colSpan={4}>Suma:</th>
+          <th className='total-label' scope="row" colSpan={4}>Suma:</th>
           <td className="total-value" aria-live="polite">
             {formatCurrency(totalCost)}
           </td>

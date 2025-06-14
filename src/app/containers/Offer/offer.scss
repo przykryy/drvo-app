@@ -168,6 +168,12 @@ table {
     color: $text;
     font-size: 1.1rem;
   }
+  
+  .total-label {
+    text-align: right;
+    font-weight: 600;
+    color: white;
+  }
 }
 
 .terms {
@@ -391,9 +397,15 @@ table {
       border: 1px solid black !important;
     }
 
+    .total-label {
+      text-align: right;
+      font-weight: 600;
+      color: black;
+    }
+
     .total-value {
-      font-weight: 400;
-      font-size: small;
+      font-weight: 500;
+      font-size: large;
     }
 
   }
