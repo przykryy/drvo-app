@@ -159,6 +159,12 @@ table {
     padding: $spacing-unit * 2;
     text-align: left;
     border-bottom: $border-width solid $border-color;
+
+    // Add specific width for the input column (4th column)
+    &:nth-child(4) {
+      width: 80px;
+      max-width: 150px;
+    }
   }
 
   th {
