@@ -35,7 +35,7 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
   }, [viewModel]);
 
   const hasValidInputs = useMemo(() => {
-    return viewModel.some(item => safeParseFloat(item.quantity) > 0);
+    return viewModel.some(item => safeParseFloat(item.quantity) >= 0);
   }, [viewModel]);
 
   const handleGenerateOffer = useCallback(() => {
@@ -196,7 +196,7 @@ const safeParseFloat = (value: string): number => {
 
 const validateInput = (value: string): boolean => {
   const normalizedValue = value.replace(',', '.');
-  return /^\d*\.?\d*$/.test(normalizedValue) && parseFloat(normalizedValue) >= 0;
+  return normalizedValue === '' || /^\d*\.?\d*$/.test(normalizedValue) && parseFloat(normalizedValue) >= 0;
 };
 
 const formatCurrency = (amount: number): string => {

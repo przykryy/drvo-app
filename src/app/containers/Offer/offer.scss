@@ -1,403 +1,341 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
+// Variables
 $primary: #0f5781;
 $primary-dark: #0a3f5f;
-$primary-light: rgba($primary, 0.1);
 $text: #333;
 $text-light: #666;
 $border: #ddd;
-$border-radius: 8px;
-$spacing-unit: 8px;
-$transition-duration: 0.3s;
+$unit: 8px;
 
 // Mixins
-@mixin flex-center {
-  display: flex;
+@mixin button-base($bg: $primary, $color: white, $border: none) {
+  padding: $unit*1.5 $unit*2;
+  border-radius: $unit;
+  font-weight: 500;
+  border: $border;
+  background: $bg;
+  color: $color;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-}
-
-@mixin transition {
-  transition: all $transition-duration ease;
-}
-
-@mixin focus-ring {
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba($primary, 0.4);
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-1px);
+    background: $primary-dark;
   }
 }
-
-// Mobile Breakpoints
-$mobile-breakpoint: 480px;
-$tablet-breakpoint: 768px;
 
 .offer-container {
-  width: 90%;
   max-width: 1200px;
   margin: 2rem auto;
-  font-family: 'Roboto', sans-serif;
+  padding: $unit*2;
+  font-family: Roboto, sans-serif;
   color: $text;
   background: white;
-  padding: $spacing-unit * 2;
-  border-radius: $border-radius;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: $unit;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+// Header
+.offer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $unit*3;
+  gap: $unit*2;
+}
+
+.back-link {
+  @include button-base;
+}
+
+.print-button {
+  @include button-base(white, $primary, 2px solid $primary);
+  
+  &:hover {
+    background: rgba($primary, 0.1);
+  }
+}
+
+// Company section
+.company-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $unit*4;
+  padding-bottom: $unit*3;
+  border-bottom: 1px solid $border;
+}
+
+.company-info {
+  display: flex;
+  gap: $unit*2;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.company-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $primary;
+  margin: 0 0 $unit*1.5;
+}
+
+.contact-info {
+  p {
+    margin: $unit*0.5 0;
+    color: $text-light;
+    font-size: 0.95rem;
+  }
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $primary-dark;
+      text-decoration: underline;
+    }
+  }
+}
+
+.offer-meta {
+  text-align: right;
+  color: $text-light;
+  font-size: 0.9rem;
+
+  p { 
+    margin: $unit*0.5 0; 
+  }
+}
+
+// Title and table
+.offer-title {
+  text-align: center;
+  font-size: 1.75rem;
+  color: $primary;
+  margin: $unit*3 0;
+  font-weight: 600;
+}
+
+.table-container {
+  margin: $unit*3 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: $unit*1.5;
+    text-align: left;
+    border: 1px solid $border;
+  }
+
+  th {
+    background: $primary;
+    color: white;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    &:hover { 
+      background: rgba($primary, 0.1); 
+    }
+    
+    td { 
+      vertical-align: middle; 
+    }
+  }
+
+  tfoot {
+    border: 1px solid $border;
+  }
+
+  .total-value {
+    font-weight: 600;
+    color: $text;
+    font-size: 1.1rem;
+  }
+}
+
+.terms {
+  h3 {
+    color: $primary;
+    margin-bottom: $unit*1.5;
+    font-size: 1.1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-bottom: $unit;
+    color: $text-light;
+    position: relative;
+    padding-left: $unit*2;
+
+    &:before {
+      content: "•";
+      color: $primary;
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+
+// Empty state
+.empty-state {
+  text-align: center;
+  padding: $unit*4;
+  color: $text-light;
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .offer-container {
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
 
   .offer-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: $spacing-unit * 3;
-    gap: $spacing-unit * 2;
+    flex-direction: column;
+    gap: $unit;
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    padding: $spacing-unit * 1.5 $spacing-unit * 2;
-    background-color: $primary;
-    color: white;
-    border-radius: $border-radius;
-    text-decoration: none;
-    font-weight: 500;
-    @include transition;
-    
-    &:hover {
-      background-color: $primary-dark;
-      transform: translateY(-1px);
-    }
-  }
-
+  .back-link, 
   .print-button {
-    padding: $spacing-unit * 1.5 $spacing-unit * 2;
-    background-color: white;
-    color: $primary;
-    border: 2px solid $primary;
-    border-radius: $border-radius;
-    font-weight: 500;
-    cursor: pointer;
-    @include transition;
-
-    &:hover {
-      background-color: $primary-light;
-      transform: translateY(-1px);
-    }
+    width: 100%;
+    justify-content: center;
   }
 
   .company-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: $spacing-unit * 4;
-    padding-bottom: $spacing-unit * 3;
-    border-bottom: 1px solid $border;
+    align-items: center;
+    flex-direction: column;
+    gap: $unit*2;
   }
 
   .company-info {
-    display: flex;
-    align-items: flex-start;
-    gap: $spacing-unit * 2;
-  }
-
-  .company-logo {
-    width: 60px;
-    height: auto;
-  }
-
-  .company-details {
-    .company-name {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: $primary;
-      margin: 0 0 $spacing-unit * 1.5;
-    }
-  }
-
-  .contact-info {
-    p {
-      margin: $spacing-unit * 0.5 0;
-      color: $text-light;
-      font-size: 0.95rem;
-
-      a {
-        color: $primary;
-        text-decoration: none;
-        @include transition;
-
-        &:hover {
-          color: $primary-dark;
-          text-decoration: underline;
-        }
-      }
-    }
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .offer-meta {
-    text-align: right;
-    color: $text-light;
-    font-size: 0.9rem;
-
-    p {
-      margin: $spacing-unit * 0.5 0;
-    }
+    text-align: center;
   }
 
   .offer-title {
-    text-align: center;
-    font-size: 1.75rem;
-    color: $primary;
-    margin: $spacing-unit * 3 0;
-    font-weight: 600;
-  }
-
-  .table-container {
-    margin: $spacing-unit * 3 0;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    font-size: 1.5rem;
+    margin: $unit*2 0;
   }
 
   table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border: 1px solid $border;
-    border-radius: $border-radius;
-    overflow: hidden;
-
-    th, td {
-      padding: $spacing-unit * 1.5;
-      text-align: left;
-      border-bottom: 1px solid $border;
-      border-right: 1px solid $border;
-
-      &:last-child {
-        border-right: none;
-      }
+    thead { 
+      display: none; 
     }
 
-    th {
-      background-color: $primary;
-      color: white;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    tbody tr {
-      @include transition;
-
-      &:hover {
-        background-color: $primary-light;
-      }
+    tr {
+      display: block;
+      margin-bottom: $unit*2;
+      border: 1px solid $border;
+      border-radius: $unit;
 
       td {
-        vertical-align: middle;
+        display: block;
+        padding: $unit $unit $unit 50%;
+        position: relative;
+        border: none;
+        font-size: 0.9rem;
+
+        &[data-label]:before {
+          content: attr(data-label);
+          position: absolute;
+          left: $unit;
+          width: 45%;
+          font-weight: 600;
+          text-align: left;
+        }
       }
     }
 
-    .total-value {
-      font-weight: 600;
-      color: $primary;
-      font-size: 1.1rem;
+    tfoot {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      margin-top: 0.5rem;
+
+      tr {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: $primary; 
+        color: white; 
+        margin-bottom: $unit*2; 
+        border-radius: $unit; 
+        padding: $unit*1.5; 
+        border: 1px solid $primary; 
+        box-sizing: border-box; 
+
+        th, td {
+          display: inline-block; 
+          padding: 0; 
+          border: none; 
+          font-size: inherit; 
+          color: inherit; 
+          vertical-align: middle; 
+        }
+
+        th {
+          font-weight: 600; 
+        }
+
+        td.total-value {
+          font-weight: 600; 
+          font-size: 1.1rem; 
+          color: inherit; 
+        }
+      }
     }
   }
 
   .offer-footer {
-    margin-top: $spacing-unit * 4;
-    padding-top: $spacing-unit * 3;
-    border-top: 1px solid $border;
-    display: flex;
-    justify-content: space-between;
-    gap: $spacing-unit * 4;
-
-    .terms {
-      flex: 1;
-
-      h3 {
-        color: $primary;
-        margin-bottom: $spacing-unit * 1.5;
-        font-size: 1.1rem;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
-        li {
-          margin-bottom: $spacing-unit;
-          color: $text-light;
-          position: relative;
-          padding-left: $spacing-unit * 2;
-
-          &:before {
-            content: "•";
-            color: $primary;
-            position: absolute;
-            left: 0;
-          }
-        }
-      }
-    }
-
-    .signature {
-      text-align: center;
-      min-width: 200px;
-
-      p {
-        color: $text-light;
-        margin-bottom: $spacing-unit * 2;
-      }
-
-      .signature-line {
-        width: 200px;
-        height: 1px;
-        background-color: $border;
-        margin: $spacing-unit * 4 auto 0;
-      }
-    }
+    text-align: center;
   }
 }
 
-// Mobile Styles
-@media (max-width: $mobile-breakpoint) {
+@media (min-width: 481px) and (max-width: 768px) {
   .offer-container {
-    width: 100%;
-    margin: 0;
-    padding: $spacing-unit;
-    border-radius: 0;
-    box-shadow: none;
+    padding: $unit*1.5;
+  }
 
-    .offer-header {
-      flex-direction: column;
-      align-items: stretch;
-      gap: $spacing-unit;
-    }
+  .company-section {
+    flex-direction: column;
+    gap: $unit*2;
+  }
 
-    .back-link, .print-button {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .company-section {
-      flex-direction: column;
-      gap: $spacing-unit * 2;
-    }
-
-    .company-info {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .company-details {
-      .company-name {
-        text-align: center;
-      }
-    }
-
-    .contact-info {
-      text-align: center;
-    }
-
-    .offer-meta {
-      text-align: center;
-    }
-
-    .offer-title {
-      font-size: 1.5rem;
-      margin: $spacing-unit * 2 0;
-    }
-
-    table {
-      th, td {
-        padding: $spacing-unit;
-        font-size: 0.9rem;
-
-        &[data-label] {
-          text-align: right;
-          padding-left: 50%;
-
-          &:before {
-            content: attr(data-label);
-            position: absolute;
-            left: $spacing-unit;
-            width: 45%;
-            white-space: nowrap;
-            text-align: left;
-            font-weight: 600;
-          }
-        }
-      }
-
-      tr {
-        position: relative;
-        display: block;
-        margin-bottom: $spacing-unit * 2;
-        border: 1px solid $border;
-        border-radius: $border-radius;
-
-        td {
-          display: block;
-          border: none;
-          border-bottom: 1px solid $border;
-          position: relative;
-          padding-left: 50%;
-
-          &:last-child {
-            border-bottom: none;
-          }
-        }
-      }
-
-      thead {
-        display: none;
-      }
-    }
-
-    .offer-footer {
-      flex-direction: column;
-      gap: $spacing-unit * 3;
-
-      .terms {
-        text-align: center;
-
-        ul li {
-          text-align: left;
-        }
-      }
-
-      .signature {
-        .signature-line {
-          width: 150px;
-        }
-      }
-    }
+  .offer-meta {
+    text-align: left;
   }
 }
 
-// Tablet Styles
-@media screen and (min-width: #{$mobile-breakpoint + 1}) and (max-width: $tablet-breakpoint) {
-  .offer-container {
-    width: 95%;
-    padding: $spacing-unit * 1.5;
-
-    .company-section {
-      flex-direction: column;
-      gap: $spacing-unit * 2;
-    }
-
-    .offer-meta {
-      text-align: left;
-    }
-
-    .offer-footer {
-      flex-direction: column;
-      gap: $spacing-unit * 3;
-    }
-  }
-}
-
-// Print Styles
+// Print styles
 @media print {
   .offer-container {
     width: 100%;
@@ -405,67 +343,63 @@ $tablet-breakpoint: 768px;
     padding: 0;
     box-shadow: none;
     color: black;
+  }
 
-    .offer-header {
-      display: none;
-    }
+  .offer-header { 
+    display: none; 
+  }
 
-    .company-section {
-      border-bottom: 1px solid black;
-    }
+  .company-section, 
+  table, 
+  .offer-footer {
+    border-color: black;
+  }
 
-    .company-details .company-name {
-      color: black;
-    }
-
-    .contact-info p, .offer-meta {
-      color: black;
-    }
-
-    .offer-title {
-      color: black;
-    }
-
-    table {
-      border: 1px solid black;
+  .company-name, 
+  .contact-info p, 
+  .offer-meta, 
+  .offer-title, 
+  .terms h3, 
+  .terms li {
+    color: black;
+  }
       
-      th, td {
-        border: 1px solid black;
-        color: black;
-        padding: $spacing-unit;
-      }
-      
-      th {
-        background-color: white !important;
-        color: black !important;
-      }
-    }
+  th {
+    border: 1px solid black !important;
+  }
 
-    .offer-footer {
-      border-top: 1px solid black;
-
-      .terms h3 {
-        color: black;
-      }
-
-      .terms li {
-        color: black;
-
-        &:before {
-          color: black;
-        }
-      }
-
-      .signature {
-        .signature-line {
-          background-color: black;
-        }
-      }
-    }
-
-    a {
-      text-decoration: none;
+  table {
+    border: 1px solid black !important;
+    th, td {
+      border-color: black;
       color: black;
+      border: 1px solid black !important;
+
     }
+    tr {
+      border: 1px solid black !important;
+    }
+    thead {
+      border: 1px solid black !important;
+    }
+    td {
+      border: 1px solid black !important;
+    }
+    
+    th {
+      background: white;
+      border: 1px solid black !important;
+    }
+
+    .total-value {
+      font-weight: 400;
+      font-size: small;
+    }
+
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
   }
 }

@@ -83,6 +83,7 @@ $tablet-breakpoint: 768px;
   .total-label {
     text-align: left !important;
     font-weight: 600;
+    color: $bg-white;
   }
 
   .total-value {
@@ -170,7 +171,7 @@ table {
   .total-label {
     text-align: right;
     font-weight: 600;
-    color: $text-dark;
+    color: $bg-white;
   }
 
   .total-value {
