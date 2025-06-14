@@ -14,10 +14,32 @@ $border-color-hover: $primary-color;
 $border-color-error: $error-color;
 $spacing-unit: 8px;
 $transition-duration: 0.3s;
+$unit: 8px;
 
 // Mobile Breakpoints
 $mobile-breakpoint: 480px;
 $tablet-breakpoint: 768px;
+
+// Mixins
+@mixin button-base($bg: $primary-color, $color: white, $border: none) {
+  padding: $unit*1.5 $unit*2;
+  border-radius: $unit;
+  font-weight: 500;
+  border: $border;
+  background: $bg;
+  color: $color;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  
+  &:hover {
+    transform: translateY(-1px);
+    background: $hover-color;
+  }
+}
 
 // Mixins
 @mixin flex-center {
@@ -228,28 +250,10 @@ table {
 
 // Generate Offer Button
 .generate-offer-button {
-  min-width: 200px;
-  padding: $spacing-unit * 1.5 $spacing-unit * 3;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background-color: $primary-color;
-  color: $bg-white;
-  border: none;
-  border-radius: $border-radius;
-  cursor: pointer;
-  @include transition;
-
-  &:hover:not(:disabled) {
-    background-color: $hover-color;
-    transform: translateY(-1px);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  @include button-base;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
 }
 
 // Mobile-specific styles
@@ -294,8 +298,11 @@ table {
   }
 
   .generate-offer-button {
+    @include button-base;
     width: 100%;
-    min-width: auto;
+    min-width: 100%;
+    justify-content: center;
+    text-align: center;
     padding: $spacing-unit * 1.5;
     font-size: 1rem;
     margin: $spacing-unit 0;
@@ -331,6 +338,8 @@ table {
   }
 
   .generate-offer-button {
+    @include button-base;
+
     min-width: 180px;
   }
 }
@@ -380,6 +389,9 @@ table {
 
   .generate-offer-button {
     width: 100%;
+    min-width: 100%;
+    justify-content: center;
+    text-align: center;
     margin: 0;
   }
 }

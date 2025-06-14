@@ -117,14 +117,17 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
       </div>
 
       <div className="mobile-action">
-        <PrimaryButton
-          id="generate-offer-button-mobile"
+          <button 
           className="generate-offer-button"
-          label="Wygeneruj ofertę"
           onClick={handleGenerateOffer}
+          id="generate-offer-button-mobile"
           disabled={!hasValidInputs}
           aria-label="Wygeneruj ofertę na podstawie wprowadzonych parametrów"
-        />
+          type="button"
+        >
+          {"Wygeneruj ofertę"}
+        </button>
+
       </div>
 
       <ErrorModal
