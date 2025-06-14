@@ -251,8 +251,9 @@ table {
 // Generate Offer Button
 .generate-offer-button {
   @include button-base;
+  display: inline-flex;
   justify-content: center;
-  width: 100%;
+  align-items: center;
   text-align: center;
 }
 
@@ -299,10 +300,12 @@ table {
 
   .generate-offer-button {
     @include button-base;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     width: 100%;
     min-width: 100%;
-    justify-content: center;
-    text-align: center;
     padding: $spacing-unit * 1.5;
     font-size: 1rem;
     margin: $spacing-unit 0;
@@ -388,10 +391,12 @@ table {
   }
 
   .generate-offer-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     width: 100%;
     min-width: 100%;
-    justify-content: center;
-    text-align: center;
     margin: 0;
   }
 }

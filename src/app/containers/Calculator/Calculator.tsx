@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import './calculator.scss';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { PrimaryButton } from '../../components/Button/PrimaryButton';
 import { Parameter, parameters } from 'app/resources/parameters';
 import { ErrorModal } from 'app/components/ErrorModal/ErrorModal';
 
@@ -30,7 +29,7 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
 
   // Memoized total cost calculation
   const totalCost = useMemo(() => {
-    return Math.floor(viewModel.reduce((total, item) => 
+    return Math.floor(viewModel.reduce((total, item) =>
       total + (item.price * safeParseFloat(item.quantity)), 0));
   }, [viewModel]);
 
@@ -69,7 +68,7 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
   return (
     <div className={`calculator-container ${className || ''}`}>
       <h1 className="calculator-title">Kalkulator kosztów</h1>
-      
+
       <div className="table-wrapper">
         <table role="grid" aria-label="Kalkulator parametrów i kosztów">
           <thead>
@@ -102,14 +101,16 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
             </tr>
             <tr className="desktop">
               <td colSpan={5} className="action-cell">
-                <PrimaryButton
-                  id="generate-offer-button"
+                <button
                   className="generate-offer-button"
-                  label="Wygeneruj ofertę"
                   onClick={handleGenerateOffer}
+                  id="generate-offer-button-mobile"
                   disabled={!hasValidInputs}
                   aria-label="Wygeneruj ofertę na podstawie wprowadzonych parametrów"
-                />
+                  type="button"
+                >
+                  {"Wygeneruj ofertę"}
+                </button>
               </td>
             </tr>
           </tfoot>
@@ -117,7 +118,7 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
       </div>
 
       <div className="mobile-action">
-          <button 
+        <button
           className="generate-offer-button"
           onClick={handleGenerateOffer}
           id="generate-offer-button-mobile"
@@ -127,7 +128,6 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
         >
           {"Wygeneruj ofertę"}
         </button>
-
       </div>
 
       <ErrorModal
@@ -143,13 +143,13 @@ interface IItemCalculatorProps extends IItemProps {
   hasError?: boolean;
 }
 
-const ItemCalculator: React.FC<IItemCalculatorProps> = React.memo(({ 
-  parameter: { name, description, unit, price, quantity }, 
+const ItemCalculator: React.FC<IItemCalculatorProps> = React.memo(({
+  parameter: { name, description, unit, price, quantity },
   onChange,
-  hasError 
+  hasError
 }) => {
-  const totalPrice = useMemo(() => 
-    Math.floor(safeParseFloat(quantity) * price), 
+  const totalPrice = useMemo(() =>
+    Math.floor(safeParseFloat(quantity) * price),
     [quantity, price]
   );
 
