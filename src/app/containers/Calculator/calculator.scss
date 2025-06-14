@@ -74,10 +74,6 @@ $tablet-breakpoint: 768px;
       text-align: left;
       color: $text-dark;
     }
-
-    &:last-child {
-      border-bottom: none;
-    }
   }
 
   .total-label {
@@ -136,7 +132,8 @@ table {
   font-size: 1rem;
   line-height: 1.5;
 
-  th, td {
+  th,
+  td {
     padding: $spacing-unit * 2;
     text-align: left;
     border-bottom: $border-width solid $border-color;
@@ -161,10 +158,6 @@ table {
   tr {
     &:hover td {
       background-color: rgba($primary-color, 0.05);
-    }
-
-    &:last-child td {
-      border-bottom: none;
     }
   }
 
@@ -210,6 +203,7 @@ table {
 
   &[type="number"] {
     -moz-appearance: textfield;
+
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -276,7 +270,7 @@ table {
     tr {
       border: $border-width solid $border-color;
       margin-bottom: $spacing-unit;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
@@ -284,7 +278,7 @@ table {
 
     td {
       border-bottom: $border-width solid $border-color;
-      
+
       &:last-child {
         border-bottom: none;
       }
@@ -293,7 +287,7 @@ table {
 
   .quantity-input {
     border: $border-width solid $border-color;
-    
+
     &:hover {
       border-color: $border-color-hover;
     }
@@ -326,7 +320,8 @@ table {
   table {
     font-size: 0.9rem;
 
-    th, td {
+    th,
+    td {
       padding: $spacing-unit * 1.5;
     }
   }
@@ -340,38 +335,6 @@ table {
   }
 }
 
-@media print {
-  .calculator-container {
-    padding: 0;
-  }
-
-  .table-wrapper {
-    border: $border-width solid $text-dark;
-    box-shadow: none;
-  }
-
-  table {
-    font-size: 12px;
-
-    th {
-      background-color: $bg-white !important;
-      color: $text-dark !important;
-      border-bottom: $border-width solid $text-dark;
-    }
-
-    .desktop {
-      display: none !important;
-    }
-
-    td {
-      border-bottom: $border-width solid $border-color;
-    }
-  }
-
-  .quantity-input {
-    border: $border-width solid $text-dark;
-  }
-}
 
 // Additional mobile optimizations
 @media (max-width: $mobile-breakpoint) {
