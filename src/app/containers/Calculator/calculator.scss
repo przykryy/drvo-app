@@ -120,22 +120,14 @@ $tablet-breakpoint: 768px;
   margin: 0 auto;
   padding: $spacing-unit * 2;
 
-
   .calculator-title {
     font-size: 1.75rem;
-    color: $text-dark;
-    margin-bottom: $spacing-unit * 3;
     text-align: center;
   }
 
-  // Table Styles
   .table-wrapper {
-    overflow-x: auto;
-    background: $bg-white;
-    border-radius: $border-radius;
     border: $border-width solid $border-color;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 0 -$spacing-unit;
 
     @media (max-width: $mobile-breakpoint) {
       margin: 0;
@@ -148,19 +140,8 @@ $tablet-breakpoint: 768px;
 
   table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.5;
-
     th,
     td {
-      padding: $spacing-unit * 2;
-      text-align: left;
-      border-bottom: $border-width solid $border-color;
-
-      // Add specific width for the input column (4th column)
       &:nth-child(4) {
         width: 80px;
         max-width: 150px;
@@ -172,8 +153,6 @@ $tablet-breakpoint: 768px;
       color: $bg-white;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      white-space: nowrap;
       border-bottom: $border-width solid darken($primary-color, 10%);
 
       &[scope="col"] {
@@ -195,12 +174,6 @@ $tablet-breakpoint: 768px;
       color: $bg-white;
     }
 
-    .total-value {
-      font-weight: 700;
-      color: $primary-color;
-      font-size: 1.1rem;
-    }
-
     .action-cell {
       padding: $spacing-unit * 2;
       text-align: center;
@@ -216,8 +189,6 @@ $tablet-breakpoint: 768px;
   border-radius: $border-radius;
   font-size: 1rem;
   text-align: center;
-  background-color: $bg-white;
-  color: $text-dark;
   @include transition;
   @include focus-ring;
 
@@ -258,10 +229,7 @@ $tablet-breakpoint: 768px;
 // Generate Offer Button
 .generate-offer-button {
   @include button-base;
-  display: inline-flex;
   justify-content: center;
-  align-items: center;
-  text-align: center;
 }
 
 // Mobile-specific styles
@@ -270,112 +238,24 @@ $tablet-breakpoint: 768px;
     padding: $spacing-unit;
   }
 
-  .calculator-title {
-    font-size: 1.25rem;
-    margin-bottom: $spacing-unit * 2;
-    padding: 0 $spacing-unit;
-  }
-
   table {
     @include mobile-table;
-
     tr {
-      border: $border-width solid $border-color;
-      margin-bottom: $spacing-unit;
-
       &:last-child {
         margin-bottom: 0;
       }
     }
-
-    td {
-      border-bottom: $border-width solid $border-color;
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-
-  .quantity-input {
-    border: $border-width solid $border-color;
-
-    &:hover {
-      border-color: $border-color-hover;
-    }
-  }
-
-  .generate-offer-button {
-    @include button-base;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    min-width: 100%;
-    padding: $spacing-unit * 1.5;
-    font-size: 1rem;
-    margin: $spacing-unit 0;
-  }
-
-  .error-message {
-    font-size: 0.75rem;
-    margin-top: $spacing-unit * 0.5;
-  }
-}
-
-// Tablet-specific styles
-@media screen and (min-width: #{$mobile-breakpoint + 1}) and (max-width: $tablet-breakpoint) {
-  .calculator-container {
-    padding: $spacing-unit * 1.5;
-  }
-
-  .calculator-title {
-    font-size: 1.5rem;
-  }
-
-  table {
-    font-size: 0.9rem;
-
-    th,
-    td {
-      padding: $spacing-unit * 1.5;
-    }
-  }
-
-  .quantity-input {
-    width: 90px;
-  }
-
-  .generate-offer-button {
-    @include button-base;
-
-    min-width: 180px;
   }
 }
 
 
-// Additional mobile optimizations
+
 @media (max-width: $mobile-breakpoint) {
-  .parameter-label {
-    font-size: 0.9rem;
-  }
-
-  td {
-    font-size: 0.9rem;
-  }
-
-  .total-value {
-    font-size: 1rem;
-  }
-
-  // Improve touch targets
   .quantity-input,
   .generate-offer-button {
-    min-height: 44px; // Minimum touch target size
+    min-height: 33px; // Minimum touch target size
   }
 
-  // Add visual feedback for touch
   .generate-offer-button:active {
     transform: scale(0.98);
   }
