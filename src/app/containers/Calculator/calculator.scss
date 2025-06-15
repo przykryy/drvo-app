@@ -2,12 +2,7 @@
 $primary-color: #0f5781;
 $hover-color: #0a3f5f;
 $error-color: #dc3545;
-$success-color: #28a745;
-$bg-light: #f9f9f9;
 $bg-white: #fff;
-$text-dark: #333;
-$text-light: #666;
-$border-radius: 8px;
 $border-width: 1px;
 $border-color: rgba($primary-color, 0.2);
 $border-color-hover: $primary-color;
@@ -18,7 +13,6 @@ $unit: 8px;
 
 // Mobile Breakpoints
 $mobile-breakpoint: 480px;
-$tablet-breakpoint: 768px;
 
 // Mixins
 @mixin button-base($bg: $primary-color, $color: white, $border: none) {
@@ -34,18 +28,11 @@ $tablet-breakpoint: 768px;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
-
+  
   &:hover {
     transform: translateY(-1px);
     background: $hover-color;
   }
-}
-
-// Mixins
-@mixin flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 @mixin transition {
@@ -78,8 +65,12 @@ $tablet-breakpoint: 768px;
     margin-bottom: $spacing-unit * 2;
     padding: $spacing-unit;
     background: $bg-white;
-    border-radius: $border-radius;
+    border-radius: $unit;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   td {
@@ -94,23 +85,7 @@ $tablet-breakpoint: 768px;
       content: attr(data-label);
       font-weight: 600;
       text-align: left;
-      color: $text-dark;
     }
-  }
-
-  .total-label {
-    text-align: left !important;
-    font-weight: 600;
-    color: $bg-white;
-  }
-
-  .total-value {
-    text-align: right;
-  }
-
-  .action-cell {
-    padding: $spacing-unit;
-    text-align: center;
   }
 }
 
@@ -119,82 +94,66 @@ $tablet-breakpoint: 768px;
   max-width: 1200px;
   margin: 0 auto;
   padding: $spacing-unit * 2;
+}
 
-  .calculator-title {
-    font-size: 1.75rem;
-    text-align: center;
-  }
+.calculator-title {
+  font-size: 1.75rem;
+  text-align: center;
+}
 
-  .table-wrapper {
-    border: $border-width solid $border-color;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.table-wrapper {
+  border: $border-width solid $border-color;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-    @media (max-width: $mobile-breakpoint) {
-      margin: 0;
-      border-radius: 0;
-      border-left: none;
-      border-right: none;
-      box-shadow: none;
-    }
-  }
-
-  table {
-    width: 100%;
-    th,
-    td {
-      &:nth-child(4) {
-        width: 80px;
-        max-width: 150px;
-      }
-    }
-
-    th {
-      background-color: $primary-color;
-      color: $bg-white;
-      font-weight: 600;
-      text-transform: uppercase;
-      border-bottom: $border-width solid darken($primary-color, 10%);
-
-      &[scope="col"] {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-      }
-    }
-
-    tr {
-      &:hover td {
-        background-color: rgba($primary-color, 0.05);
-      }
-    }
-
-    .total-label {
-      text-align: right;
-      font-weight: 600;
-      color: $bg-white;
-    }
-
-    .action-cell {
-      padding: $spacing-unit * 2;
-      text-align: center;
-    }
+  @media (max-width: $mobile-breakpoint) {
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
   }
 }
 
-// Input Styles
+table {
+  width: 100%;
+
+  th,
+  td {
+    &:nth-child(4) {
+      width: 80px;
+      max-width: 150px;
+    }
+  }
+
+  th {
+    background-color: $primary-color;
+    color: $bg-white;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: $border-width solid darken($primary-color, 10%);
+  }
+
+  .total-label {
+    text-align: right;
+    font-weight: 600;
+    color: $bg-white;
+  }
+
+  .action-cell {
+    padding: $spacing-unit * 2;
+    text-align: center;
+  }
+}
+
 .quantity-input {
   width: 100px;
   padding: $spacing-unit;
   border: $border-width solid $border-color;
-  border-radius: $border-radius;
+  border-radius: $unit;
   font-size: 1rem;
   text-align: center;
   @include transition;
   @include focus-ring;
-
-  &:hover {
-    border-color: $border-color-hover;
-  }
 
   &.input-error {
     border-color: $border-color-error;
@@ -212,56 +171,22 @@ $tablet-breakpoint: 768px;
   }
 }
 
-// Error Message
 .error-message {
   color: $error-color;
   font-size: 0.875rem;
   margin-top: $spacing-unit;
 }
 
-// Parameter Label
 .parameter-label {
   font-weight: 500;
-  color: $text-dark;
   cursor: pointer;
 }
 
-// Generate Offer Button
 .generate-offer-button {
   @include button-base;
   justify-content: center;
 }
 
-// Mobile-specific styles
-@media (max-width: $mobile-breakpoint) {
-  .calculator-container {
-    padding: $spacing-unit;
-  }
-
-  table {
-    @include mobile-table;
-    tr {
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-}
-
-
-
-@media (max-width: $mobile-breakpoint) {
-  .quantity-input,
-  .generate-offer-button {
-    min-height: 33px; // Minimum touch target size
-  }
-
-  .generate-offer-button:active {
-    transform: scale(0.98);
-  }
-}
-
-// Mobile Action Button
 .mobile-action {
   display: none;
   padding: $spacing-unit;
@@ -278,17 +203,11 @@ $tablet-breakpoint: 768px;
   }
 
   .generate-offer-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
     width: 100%;
-    min-width: 100%;
     margin: 0;
   }
 }
 
-// Fix for desktop button visibility
 @media screen and (min-width: #{$mobile-breakpoint + 1}) {
   .desktop {
     display: table-row;
@@ -298,5 +217,14 @@ $tablet-breakpoint: 768px;
 @media (max-width: $mobile-breakpoint) {
   .desktop {
     display: none;
+  }
+
+  .quantity-input,
+  .generate-offer-button {
+    min-height: 33px;
+  }
+
+  .generate-offer-button:active {
+    transform: scale(0.98);
   }
 }

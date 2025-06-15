@@ -66,9 +66,6 @@ $unit: 8px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: $unit*4;
-  padding-bottom: $unit*3;
-  border-bottom: 1px solid $border;
 }
 
 .company-info {
@@ -215,13 +212,10 @@ table {
 @media (max-width: 480px) {
   .offer-container {
     margin: 0;
-    border-radius: 0;
-    box-shadow: none;
   }
 
   .offer-header {
     flex-direction: column;
-    gap: $unit;
   }
 
   .back-link, 
@@ -267,25 +261,19 @@ table {
         padding: $unit $unit $unit 50%;
         position: relative;
         border: none;
-        font-size: 0.9rem;
 
         &[data-label]:before {
           content: attr(data-label);
           position: absolute;
           left: $unit;
-          width: 45%;
           font-weight: 600;
-          text-align: left;
         }
       }
     }
 
     tfoot {
       display: block;
-      width: 100%;
-      box-sizing: border-box;
       border: none;
-      margin-top: 0.5rem;
 
       tr {
         display: flex;
@@ -293,23 +281,12 @@ table {
         align-items: center;
         background: $primary; 
         color: white; 
-        margin-bottom: $unit*2; 
-        border-radius: $unit; 
         padding: $unit*1.5; 
         border: 1px solid $primary; 
-        box-sizing: border-box; 
 
         th, td {
-          display: inline-block; 
           padding: 0; 
           border: none; 
-          font-size: inherit; 
-          color: inherit; 
-          vertical-align: middle; 
-        }
-
-        th {
-          font-weight: 600; 
         }
 
         td.total-value {
@@ -319,25 +296,6 @@ table {
         }
       }
     }
-  }
-
-  .offer-footer {
-    text-align: center;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .offer-container {
-    padding: $unit*1.5;
-  }
-
-  .company-section {
-    flex-direction: column;
-    gap: $unit*2;
-  }
-
-  .offer-meta {
-    text-align: left;
   }
 }
 
@@ -375,39 +333,21 @@ table {
   }
 
   table {
-    border: 1px solid black !important;
     th, td {
       border-color: black;
       color: black;
       border: 1px solid black !important;
 
     }
-    tr {
-      border: 1px solid black !important;
-    }
-    thead {
-      border: 1px solid black !important;
-    }
-    td {
-      border: 1px solid black !important;
-    }
-    
+
     th {
       background: white;
       border: 1px solid black !important;
     }
 
     .total-label {
-      text-align: right;
-      font-weight: 600;
       color: black;
     }
-
-    .total-value {
-      font-weight: 500;
-      font-size: large;
-    }
-
   }
 
   a {
