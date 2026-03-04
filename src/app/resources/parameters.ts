@@ -24,6 +24,13 @@ export const parameters: Parameter[] = [
         quantity: "",
     },
     {
+        name: "akrylowanie",
+        description: "Akrylowanie.",
+        unit: Unit.Szt,
+        price: 950,
+        quantity: "",
+    },
+    {
         name: "stopnie_beton_1m",
         description: "Stopnie mocowane do betonu wąskie schody do 1m.",
         unit: Unit.Szt,
@@ -221,7 +228,7 @@ export const parameters: Parameter[] = [
     },
     {
         name: "led_montaz",
-        description: "Oświetlenie ledowe z montażem elektryki. Liczba stopni.",
+        description: "Oświetlenie ledowe w podstopnicach. Liczba stopni.",
         unit: Unit.Szt,
         price: 238,
         quantity: "",

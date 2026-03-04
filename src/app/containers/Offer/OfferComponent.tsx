@@ -60,7 +60,7 @@ const getCurrentDate = (() => {
 })();
 
 export const Offer: React.FC<IOfferProps> = ({ className }) => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
   // Process parameters with pre-calculated values
@@ -69,11 +69,36 @@ export const Offer: React.FC<IOfferProps> = ({ className }) => {
     [searchParams]
   );
 
-  // Calculate total from pre-calculated values
-  const totalCost = useMemo(() => 
-    processedParameters.reduce((sum, item) => sum + item.totalPrice, 0),
-    [processedParameters]
-  );
+  // Calculate totals and discount
+  const { subtotal, discountPercent, totalCost } = useMemo(() => {
+    const base = processedParameters.reduce((sum, item) => sum + item.totalPrice, 0);
+    const discountRaw = searchParams.get('rabat') ?? '';
+    const parsed = clampPercentage(safeParseFloat(discountRaw));
+    const discounted = Math.floor(base * Math.max(0, (100 - parsed)) / 100);
+    return { subtotal: Math.floor(base), discountPercent: parsed, totalCost: discounted };
+  }, [processedParameters, searchParams]);
+
+  const [discountError, setDiscountError] = React.useState(false);
+
+  const onChangeDiscount = useCallback((value: string) => {
+    const normalized = value.replace(',', '.');
+    const isValid = /^\d*\.?\d*$/.test(normalized);
+    const percent = safeParseFloat(normalized);
+    const withinRange = percent >= 0 && percent <= 100;
+    setDiscountError(!(isValid && withinRange));
+
+    if (isValid && withinRange) {
+      setSearchParams(sp => {
+        const newSp = new URLSearchParams(sp);
+        if (value === '' || safeParseFloat(value) === 0) {
+          newSp.delete('rabat');
+        } else {
+          newSp.set('rabat', value.replace(',', '.'));
+        }
+        return newSp;
+      });
+    }
+  }, [setSearchParams]);
 
   // Memoized print handler to prevent unnecessary re-renders
   const handlePrint = useCallback(() => {
@@ -114,7 +139,12 @@ export const Offer: React.FC<IOfferProps> = ({ className }) => {
 
       <OfferTable 
         parameters={processedParameters}
+        subtotal={subtotal}
+        discountPercent={discountPercent}
         totalCost={totalCost}
+        discountInputValue={searchParams.get('rabat') ?? ''}
+        onChangeDiscount={onChangeDiscount}
+        discountError={discountError}
       />
 
       <OfferFooter />
@@ -179,9 +209,6 @@ const CompanySection: React.FC = React.memo(() => (
       <p className="offer-date">
         Data wystawienia: {getCurrentDate.formatted}
       </p>
-      <p className="offer-number">
-        Nr oferty: {getCurrentDate.timestamp}
-      </p>
     </div>
   </div>
 ));
@@ -189,8 +216,13 @@ const CompanySection: React.FC = React.memo(() => (
 // Extracted table component with improved accessibility
 const OfferTable: React.FC<{
   parameters: ProcessedParameter[];
+  subtotal: number;
+  discountPercent: number;
   totalCost: number;
-}> = React.memo(({ parameters, totalCost }) => (
+  discountInputValue: string;
+  onChangeDiscount: (value: string) => void;
+  discountError: boolean;
+}> = React.memo(({ parameters, subtotal, discountPercent, totalCost, discountInputValue, onChangeDiscount, discountError }) => (
   <div className="table-container" role="region" aria-label="Szczegóły oferty">
     <table role="table" aria-label="Tabela parametrów i kosztów">
       <thead>
@@ -214,9 +246,42 @@ const OfferTable: React.FC<{
         <tr>
           <th className='total-label' scope="row" colSpan={4}>Suma:</th>
           <td className="total-value" aria-live="polite">
+            {formatCurrency(subtotal)}
+          </td>
+        </tr>
+        {discountPercent > 0 && (
+          <>
+            <tr>
+              <th className='total-label' scope="row" colSpan={4}>Rabat (%):</th>
+              <td>
+                <input
+              id={`offer-input-rabat`}
+              className={`quantity-input ${discountError ? 'input-error' : ''}`}
+              value={discountInputValue}
+              onChange={event => onChangeDiscount(event.target.value)}
+              name={'rabat'}
+              type="text"
+              inputMode="decimal"
+                  pattern="[0-9]*[.,?[0-9]*"
+              aria-label={`Rabat procentowy`}
+              aria-invalid={discountError}
+              placeholder="0"
+            />
+            {discountError && (
+              <div className="error-message" role="alert">
+                Podaj wartość 0-100
+              </div>
+            )}
+          </td>
+        </tr>
+        <tr>
+          <th className='total-label' scope="row" colSpan={4}>Suma po rabacie:</th>
+          <td className="total-value" aria-live="polite">
             {formatCurrency(totalCost)}
           </td>
         </tr>
+          </>
+        )}
       </tfoot>
     </table>
   </div>
@@ -251,6 +316,14 @@ const OfferItem: React.FC<IOfferItemProps> = React.memo(({ parameter }) => {
     </tr>
   );
 });
+
+// helpers
+const clampPercentage = (value: number): number => {
+  if (!isFinite(value)) return 0;
+  if (value < 0) return 0;
+  if (value > 100) return 100;
+  return value;
+};
 
 // Set display names for better debugging
 OfferHeader.displayName = 'OfferHeader';

@@ -10,7 +10,7 @@ $REMOTE_TEMP_NGINX_CONF = "/tmp/stairs.conf"
 $REMOTE_APP_DIR = "/home/frog/stairs"
 $LOCAL_BUILD_DIR = ".\build"
 $LOCAL_NGINX_CONF = ".\nginx.conf"
-$password = "3S8JZS4pk2"
+$password = "Zazxh73v"
 
 # Colors for output
 $ErrorColor = "Red"

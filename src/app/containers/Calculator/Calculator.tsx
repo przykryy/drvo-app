@@ -27,11 +27,17 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
     }));
   }, [searchParams]);
 
-  // Memoized total cost calculation
-  const totalCost = useMemo(() => {
-    return Math.floor(viewModel.reduce((total, item) =>
-      total + (item.price * safeParseFloat(item.quantity)), 0));
-  }, [viewModel]);
+  // Memoized total cost calculation with discount
+  const { totalCost } = useMemo(() => {
+    const baseTotal = viewModel.reduce((total, item) =>
+      total + (item.price * safeParseFloat(item.quantity)), 0);
+
+    const discountRaw = searchParams.get('rabat') ?? '';
+    const parsedDiscount = clampPercentage(safeParseFloat(discountRaw));
+
+    const discounted = Math.floor(baseTotal * Math.max(0, (100 - parsedDiscount)) / 100);
+    return { totalCost: discounted };
+  }, [viewModel, searchParams]);
 
   const hasValidInputs = useMemo(() => {
     return viewModel.some(item => safeParseFloat(item.quantity) >= 0);
@@ -65,6 +71,26 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
     };
   }, [setSearchParams]);
 
+  const onChangeDiscount = useCallback((value: string) => {
+    const isValid = validateInput(value);
+    // additionally ensure percent range 0-100
+    const percent = safeParseFloat(value.replace(',', '.'));
+    const withinRange = percent >= 0 && percent <= 100;
+    setInputErrors(prev => ({ ...prev, rabat: !(isValid && withinRange) }));
+
+    if (isValid && withinRange) {
+      setSearchParams(sp => {
+        const newSp = new URLSearchParams(sp);
+        if (value === '' || safeParseFloat(value) === 0) {
+          newSp.delete('rabat');
+        } else {
+          newSp.set('rabat', value.replace(',', '.'));
+        }
+        return newSp;
+      });
+    }
+  }, [setSearchParams]);
+
   return (
     <div className={`calculator-container ${className || ''}`}>
       <h1 className="calculator-title">Kalkulator kosztów</h1>
@@ -91,6 +117,31 @@ export const Calculator: React.FC<ICalculatorProps> = ({ className }) => {
             ))}
           </tbody>
           <tfoot>
+            <tr>
+              <th colSpan={4} scope="row" className="total-label" data-label="Rabat">
+                Rabat (%):
+              </th>
+              <td>
+                <input
+                  id={`input-rabat`}
+                  className={`quantity-input ${inputErrors['rabat'] ? 'input-error' : ''}`}
+                  value={searchParams.get('rabat') ?? ''}
+                  onChange={event => onChangeDiscount(event.target.value)}
+                  name={'rabat'}
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9]*[.,]?[0-9]*"
+                  aria-label={`Rabat procentowy`}
+                  aria-invalid={inputErrors['rabat']}
+                  placeholder="0"
+                />
+                {inputErrors['rabat'] && (
+                  <div className="error-message" role="alert">
+                    Podaj wartość 0-100
+                  </div>
+                )}
+              </td>
+            </tr>
             <tr>
               <th colSpan={4} scope="row" className="total-label" data-label="Suma">
                 Suma:
@@ -209,4 +260,11 @@ const formatCurrency = (amount: number): string => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2
   }).format(amount);
+};
+
+const clampPercentage = (value: number): number => {
+  if (!isFinite(value)) return 0;
+  if (value < 0) return 0;
+  if (value > 100) return 100;
+  return value;
 };
