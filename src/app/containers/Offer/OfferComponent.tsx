@@ -39,12 +39,15 @@ const mergeSearchParams = (
     .map(param => {
       const quantity = paramsMap[param.name] ?? "";
       const parsedQuantity = safeParseFloat(quantity);
+      const customPriceStr = paramsMap[`${param.name}-price`];
+      const price = customPriceStr !== undefined ? safeParseFloat(customPriceStr) : param.price;
       
       return { 
         ...param, 
+        price,
         quantity,
         parsedQuantity,
-        totalPrice: Math.floor(parsedQuantity * param.price)
+        totalPrice: Math.floor(parsedQuantity * price)
       };
     })
     .filter(param => param.parsedQuantity > 0);
@@ -304,13 +307,52 @@ const OfferFooter: React.FC = React.memo(() => (
 
 // Optimized OfferItem using pre-calculated values
 const OfferItem: React.FC<IOfferItemProps> = React.memo(({ parameter }) => {
-  const { description, unit, price, quantity, totalPrice } = parameter;
+  const { description, unit, price, quantity, totalPrice, name } = parameter;
+  const [, setSearchParams] = useSearchParams();
+
+  const [inputValue, setInputValue] = React.useState(price.toString());
+
+  React.useEffect(() => {
+    setInputValue(price.toString());
+  }, [price]);
+
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setInputValue(value);
+
+    setSearchParams(sp => {
+      const newSp = new URLSearchParams(sp);
+      const defaultPrice = parameters.find(p => p.name === name)?.price;
+      const numericValue = safeParseFloat(value);
+
+      if (value.trim() === '' || (defaultPrice !== undefined && numericValue === defaultPrice)) {
+        newSp.delete(`${name}-price`);
+      } else {
+        newSp.set(`${name}-price`, value.replace(',', '.'));
+      }
+      return newSp;
+    }, { replace: true });
+  };
   
   return (
     <tr>
       <td data-label="Parametr">{description}</td>
       <td data-label="Jednostka">{unit}</td>
-      <td data-label="Cena">{formatCurrency(price)}</td>
+      <td data-label="Cena">
+        <input
+          id={`offer-input-${name}-price`}
+          type="text"
+          className="quantity-input"
+          value={inputValue}
+          onChange={handlePriceChange}
+          inputMode="decimal"
+          pattern="[0-9]*[.,]?[0-9]*"
+          aria-label={`Cena dla ${description}`}
+        />
+        <span className="print-price" aria-hidden="true">
+          {inputValue}
+        </span>
+      </td>
       <td data-label="Liczba">{quantity}</td>
       <td data-label="Cena usługi">{formatCurrency(totalPrice)}</td>
     </tr>

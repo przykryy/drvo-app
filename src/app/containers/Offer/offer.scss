@@ -8,6 +8,19 @@ $text-light: #666;
 $border: #ddd;
 $unit: 8px;
 
+// Variables
+$primary-color: #0f5781;
+$hover-color: #0a3f5f;
+$error-color: #dc3545;
+$bg-white: #fff;
+$border-width: 1px;
+$border-color: rgba($primary-color, 0.2);
+$border-color-hover: $primary-color;
+$border-color-error: $error-color;
+$spacing-unit: 8px;
+$transition-duration: 0.3s;
+$unit: 8px;
+
 // Mixins
 @mixin button-base($bg: $primary, $color: white, $border: none) {
   padding: $unit*1.5 $unit*2;
@@ -299,6 +312,34 @@ table {
   }
 }
 
+.quantity-input {
+  width: 100px;
+  padding: $spacing-unit;
+  border: $border-width solid $border-color;
+  border-radius: $unit;
+  font-size: 1rem;
+  text-align: center;
+
+  &.input-error {
+    border-color: $border-color-error;
+    background-color: rgba($error-color, 0.05);
+  }
+
+  &[type="number"] {
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.print-price {
+  display: none;
+}
+
 // Print styles
 @media print {
   .offer-container {
@@ -307,6 +348,14 @@ table {
     padding: 0;
     box-shadow: none;
     color: black;
+  }
+
+  .quantity-input {
+    display: none;
+  }
+
+  .print-price {
+    display: inline;
   }
 
   .offer-header { 
